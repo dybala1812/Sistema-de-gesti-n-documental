@@ -1,0 +1,212 @@
+MAQUETACIÓN DE INTERFAZ
+Sistema de Gestión Documental
+Bocetos descriptivos de pantallas por rol de usuario
+Práctica profesional · Proyecto integrador orientado a servicios
+Juan David Burbano Manquillo · Juan Manuel Arteaga Flores
+1 de septiembre de 2026
+Versión 1.0 — a validar con el equipo docente y el cliente
+[Ttulo1]0. Cómo leer este documento
+Este documento no es un diseño gráfico final: es la maquetación funcional de cada pantalla — qué contiene, qué botones tiene y hacia dónde lleva cada acción — para validar el flujo antes de diseñar visualmente o programar. Cada módulo corresponde a un rol de usuario del sistema y se describe como una tabla de pantallas con su objetivo, sus elementos principales y su navegación.
+Los módulos son cinco, agrupados en dos experiencias distintas:
+[Prrafodelista]•Portal público (Estudiantes): pensado para que cualquier estudiante o solicitante externo radique una petición desde su celular o computador, sin necesitar capacitación.
+[Prrafodelista]•Panel interno (Administración/Recepción, Dependencias, Archivo Central, Administrador/TIC): pensado para el personal de la universidad que usa el sistema todos los días desde un computador de oficina.
+[Ttulo1]1. Enfoque general de interfaz
+[Ttulo2]1.1 Qué tipo de interfaz conviene aquí
+La universidad combina dos públicos con necesidades muy distintas: estudiantes/externos que usan el sistema una o dos veces (necesitan algo simple y guiado, muchas veces desde el celular) y personal interno que lo usa a diario (necesita eficiencia: tablas, filtros, atajos, no pantallas bonitas pero lentas). Por eso se recomienda una sola aplicación web responsiva con dos experiencias dentro de ella, en lugar de un solo diseño para todos los roles:
+[Prrafodelista]•Portal de radicación (estudiantes): flujo tipo formulario paso a paso, mobile-first, sin menús ni módulos que no necesitan ver. Es la misma idea de portales de trámites en línea (una tarea, pocos clics, confirmación clara).
+[Prrafodelista]•Panel interno (Recepción, Dependencias, Archivo Central, Administrador): estructura de panel de control con menú lateral fijo (sidebar) y tablas densas con filtros — pensado para uso repetido en escritorio, aunque también responsivo para consultar desde el celular.
+Ambas experiencias comparten el mismo backend, la misma identidad visual institucional y el mismo sistema de estados/trazabilidad — solo cambia qué tanto se le muestra a cada tipo de usuario.
+[Ttulo2]1.2 Elementos de diseño que se repiten en todo el sistema
+[Prrafodelista]•Badges de estado con color: Radicado (azul), En trámite (ámbar), En comité (morado), Respondido (verde), Vencido (rojo), Anulado (gris).
+[Prrafodelista]•Línea de tiempo de trazabilidad: quién hizo qué y cuándo sobre un mismo radicado, visible en el panel interno.
+[Prrafodelista]•Buscador por cédula/nombre disponible en Recepción, Dependencias y Archivo Central.
+[Prrafodelista]•Tablas paginadas con filtros por fecha, tipo de trámite, dependencia y estado.
+[Prrafodelista]•Alertas de vencimiento visibles como aviso destacado, no solo como color en una tabla.
+Nota: Esta sección responde a tu pregunta de qué tipo de interfaz conviene. El resto del documento desarrolla cada módulo; si prefieres otro enfoque (por ejemplo, una sola vista para todos los roles), lo ajustamos antes de avanzar a diseño visual.
+[Ttulo1]2. Arquitectura de información común
+[Ttulo2]2.1 Estructura del panel interno (Recepción, Dependencias, Archivo Central, Administrador)
+Pantalla
+Objetivo
+Elementos principales
+Acciones / navegación
+Encabezado
+Identificar al usuario y dar acceso rápido a alertas.
+[Prrafodelista]•Logo de la universidad
+[Prrafodelista]•Nombre de usuario y rol activo
+[Prrafodelista]•Ícono de alertas/notificaciones con contador
+[Prrafodelista]•Cerrar sesión
+[Prrafodelista]•Clic en alertas abre el panel de vencimientos
+[Prrafodelista]•Presente en todas las pantallas del panel interno
+Menú lateral (sidebar)
+Navegar entre los módulos que el rol tiene permitido ver.
+[Prrafodelista]•Ítems de menú según permisos del rol (ver matriz 2.2)
+[Prrafodelista]•Ítem activo resaltado
+[Prrafodelista]•Clic en un ítem carga el módulo correspondiente en el panel central
+Panel central
+Mostrar el contenido del módulo seleccionado (bandejas, formularios, fichas).
+[Prrafodelista]•Título de la sección
+[Prrafodelista]•Filtros/buscador cuando aplica
+[Prrafodelista]•Tabla o formulario principal
+[Prrafodelista]•Varía según el módulo — ver secciones 4 a 7
+[Ttulo2]2.2 Matriz de permisos por rol
+Rol
+Módulos que ve en el sidebar
+Recepción / Ventanilla
+Bandeja de radicados, Nueva radicación, Registro sin consecutivo, Alertas de vencimiento, Buscar por cédula
+Dependencia / Programa
+Radicados asignados, Detalle y respuesta, Flujo de comité (si aplica), Alertas de vencimiento (de sus radicados)
+Archivo Central
+Documentos por clasificar, Expedientes, Buscar por cédula
+Administrador / TIC
+Gestión de usuarios, Tipos de trámite y plazos, Panel de auditoría — y, si lo requiere, acceso de solo lectura a los demás módulos
+[Ttulo2]2.3 Estructura del portal público (Estudiantes)
+El portal público no usa sidebar: es un flujo lineal de pocas pantallas, con un encabezado simple (logo + nombre de la universidad) y sin exponer módulos internos.
+[Ttulo1]3. Módulo Estudiantes — Portal de radicación
+Nota: Esta sección incorpora el cambio de alcance que confirmaste: los estudiantes SÍ tienen una parte del sistema para radicar sus propias peticiones, y la respuesta se entrega por correo (no dentro del portal). Esto amplía lo que quedó definido en F-00/F-01/F-02, donde el sistema se describía como 100% interno — al final del documento (sección 8) dejamos las preguntas que faltan para actualizar esos tres documentos.
+Pantalla
+Objetivo
+Elementos principales
+Acciones / navegación
+1. Ingreso
+Identificar al estudiante antes de radicar, sin fricción.
+[Prrafodelista]•Campo de correo institucional o cédula
+[Prrafodelista]•Verificación (código al correo, o validación contra el sistema académico si TI lo autoriza)
+[Prrafodelista]•Continuar → pasa al formulario de nueva solicitud
+[Prrafodelista]•(Pendiente confirmar con TI el mecanismo exacto de identificación — ver sección 8)
+2. Nueva solicitud
+Capturar el trámite que el estudiante quiere radicar.
+[Prrafodelista]•Tipo de trámite (reingreso, reintegro de dinero, homologación, trabajo de grado, tutela, otro)
+[Prrafodelista]•Datos del solicitante (autocompletados si hay validación previa)
+[Prrafodelista]•Descripción de la solicitud
+[Prrafodelista]•Adjuntar documento(s) (PDF/imagen — hasta 100MB para paquetes grandes como homologaciones)
+[Prrafodelista]•Correo de contacto para la respuesta
+[Prrafodelista]•Enviar → genera el radicado y pasa a la pantalla de confirmación
+[Prrafodelista]•Cancelar → vuelve al ingreso
+3. Confirmación de radicado
+Dejar constancia clara de que la solicitud quedó registrada.
+[Prrafodelista]•Número de consecutivo asignado
+[Prrafodelista]•Fecha y hora de radicación
+[Prrafodelista]•Mensaje: “tu respuesta llegará a tu correo institucional”
+[Prrafodelista]•Botón para descargar el comprobante en PDF
+[Prrafodelista]•Descargar comprobante
+[Prrafodelista]•Radicar otra solicitud → vuelve a la pantalla 2
+[Ttulo3]Pantalla opcional (recomendada, a confirmar): Mis solicitudes
+No fue mencionada en las entrevistas, pero si el estudiante ya se identifica para radicar, es económico agregar un listado simple de sus propias solicitudes con número y estado (sin bandeja de mensajería ni chat) — evita que escriban a Recepción solo para preguntar “¿cómo va mi trámite?”. Queda como pregunta abierta en la sección 8.
+[Ttulo1]4. Módulo Administración — Gestión documental (Recepción / Ventanilla)
+Pantalla
+Objetivo
+Elementos principales
+Acciones / navegación
+1. Bandeja de radicados
+Vista de trabajo diaria de Recepción: todo lo que ha entrado y su estado.
+[Prrafodelista]•Tabla: consecutivo, tipo, remitente, dependencia asignada, estado, fecha
+[Prrafodelista]•Filtros: fecha, tipo de trámite, dependencia, estado
+[Prrafodelista]•Buscador por cédula o nombre
+[Prrafodelista]•Clic en una fila → abre la ficha de radicado (pantalla 4)
+[Prrafodelista]•Botón “Nueva radicación” → pantalla 2
+[Prrafodelista]•Botón “Registrar sin consecutivo” → pantalla 3
+2. Nueva radicación manual
+Radicar correspondencia física o digital que llega directo a ventanilla.
+[Prrafodelista]•Tipo de consecutivo (comunicación recibida/enviada, circular, resolución, convenio)
+[Prrafodelista]•Datos del remitente
+[Prrafodelista]•Dependencia destinataria
+[Prrafodelista]•Adjuntar documento
+[Prrafodelista]•Fecha y hora (autogenerada, editable si es radicación tardía de algo físico)
+[Prrafodelista]•Radicar → asigna consecutivo automático y muestra confirmación
+[Prrafodelista]•Sistema calcula el plazo de respuesta según el tipo de trámite
+3. Registro sin consecutivo
+Dejar constancia de entrega de elementos que no se radican (revistas, facturas, paquetes, documentos sin firma).
+[Prrafodelista]•Fecha y hora
+[Prrafodelista]•Tipo de elemento
+[Prrafodelista]•Remitente (si se conoce)
+[Prrafodelista]•Dependencia destinataria
+[Prrafodelista]•Guardar constancia → no genera consecutivo
+[Prrafodelista]•“En realidad esto sí debe radicarse” → redirige a la pantalla 2
+4. Ficha de radicado / trazabilidad
+Ver el detalle completo y el historial de un radicado.
+[Prrafodelista]•Datos del radicado y documento adjunto
+[Prrafodelista]•Línea de tiempo de estados (radicado → asignado → en trámite/comité → respondido)
+[Prrafodelista]•Plazo de respuesta y días restantes
+[Prrafodelista]•Reasignar a otra dependencia
+[Prrafodelista]•Descargar documento
+[Prrafodelista]•Volver a la bandeja
+5. Alertas de vencimiento
+Ver de un vistazo qué radicados están por vencer o ya vencieron.
+[Prrafodelista]•Lista agrupada por urgencia (vence hoy, vence esta semana, vencido)
+[Prrafodelista]•Indicador si el retraso corresponde a espera de comité (no a la dependencia)
+[Prrafodelista]•Clic en un radicado → abre su ficha
+6. Buscar por cédula
+Consultar el historial documental completo de una persona.
+[Prrafodelista]•Campo de búsqueda por cédula o nombre
+[Prrafodelista]•Resultado: lista de todos los radicados asociados a esa persona
+[Prrafodelista]•Clic en un resultado → abre su ficha
+[Ttulo1]5. Módulo Dependencias
+Este módulo lo usa cualquiera de las dependencias de la universidad que deba responder solicitudes — el contenido es el mismo, solo cambian los datos que cada una ve (únicamente sus propios radicados asignados).
+Pantalla
+Objetivo
+Elementos principales
+Acciones / navegación
+1. Radicados asignados
+Bandeja de trabajo de la dependencia.
+[Prrafodelista]•Tabla: consecutivo, tipo de trámite, solicitante, estado, días restantes
+[Prrafodelista]•Filtros por estado (pendiente, en revisión, en comité, respondido)
+[Prrafodelista]•Clic en una fila → abre el detalle (pantalla 2)
+2. Detalle de radicado
+Revisar la solicitud antes de responder o de pasarla a comité.
+[Prrafodelista]•Datos del radicado y documento(s) adjuntos
+[Prrafodelista]•Plazo de respuesta y alerta si está próximo a vencer
+[Prrafodelista]•Historial de trazabilidad
+[Prrafodelista]•Responder → pantalla 3
+[Prrafodelista]•Si el trámite requiere comité: “Marcar en revisión de requisitos” → pantalla 4
+3. Formulario de respuesta
+Generar la respuesta y cerrar (o continuar) el trámite.
+[Prrafodelista]•Adjuntar documento de respuesta
+[Prrafodelista]•Campo de observaciones
+[Prrafodelista]•Enviar respuesta → cambia el estado a “Respondido” y envía copia automática a Recepción, Registro Académico y al solicitante
+4. Flujo de comité
+Reflejar que ciertos trámites (ej. trabajo de grado) dependen de una reunión mensual del comité.
+[Prrafodelista]•Estado actual (en revisión de requisitos / en comité / decidido)
+[Prrafodelista]•Fecha estimada de la próxima reunión (si se conoce)
+[Prrafodelista]•“Cumple requisitos” → pasa a “en comité”
+[Prrafodelista]•“No cumple requisitos” → “rechazado por requisitos incompletos” (sin pasar por comité)
+[Prrafodelista]•Registrar decisión del comité → genera la respuesta (pantalla 3)
+[Ttulo1]6. Módulo Archivo Central
+Pantalla
+Objetivo
+Elementos principales
+Acciones / navegación
+1. Documentos por clasificar
+Ver qué documentos respondidos/cerrados faltan por archivar formalmente.
+[Prrafodelista]•Tabla de documentos pendientes de clasificación
+[Prrafodelista]•Clic en un documento → pantalla 2
+2. Clasificación de expediente
+Aplicar la Tabla de Retención Documental (TRD) a un documento.
+[Prrafodelista]•Serie / subserie documental (según TRD)
+[Prrafodelista]•Expediente al que pertenece (buscar existente o crear uno nuevo)
+[Prrafodelista]•Guardar clasificación → el documento queda vinculado al expediente
+3. Consulta de expedientes
+Buscar y revisar expedientes ya clasificados.
+[Prrafodelista]•Buscador por persona, dependencia o serie documental
+[Prrafodelista]•Vista de expediente con todos sus documentos
+[Prrafodelista]•Clic en un documento → ver/descargar
+[Ttulo1]7. Módulo Administrador / TIC
+Pantalla
+Objetivo
+Elementos principales
+Acciones / navegación
+1. Gestión de usuarios
+Administrar quién tiene acceso al sistema y con qué rol.
+[Prrafodelista]•Tabla de usuarios: nombre, dependencia, rol, estado (activo/deshabilitado)
+[Prrafodelista]•Buscador
+[Prrafodelista]•Crear usuario
+[Prrafodelista]•Editar rol/dependencia
+[Prrafodelista]•Deshabilitar (sin eliminar, para conservar trazabilidad)
+2. Tipos de trámite y plazos
+Configurar, sin tocar código, cuánto se demora y si requiere comité cada tipo de solicitud.
+[Prrafodelista]•Tabla editable: tipo de trámite, plazo en días hábiles, requiere comité (sí/no)
+[Prrafodelista]•Editar plazo o requisito de comité de un tipo existente
+[Prrafodelista]•Agregar un nuevo tipo de trámite
+3. Panel de auditoría
+Ver la actividad reciente del sistema para control interno.
+[Prrafodelista]•Lista de cambios recientes: quién, qué, cuándo (creación de usuarios, ediciones de datos de personas, anulaciones)
+[Prrafodelista]•Filtrar por usuario o tipo de acción

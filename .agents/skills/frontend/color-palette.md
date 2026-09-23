@@ -1,56 +1,63 @@
 # Paleta de Colores
 
-**Estado: propuesta.** La plantilla actual de `app/globals.css` solo define
-`--background` y `--foreground`. Falta confirmar si la Universidad Autónoma tiene manual de
-identidad; si lo tiene, sus colores reemplazan los de marca de esta tabla (no los de
-estado).
+Fuente: maquetación de interfaz SGD v1.0 (`ia_contexto/spec/Interfaz del documento/`).
+Los tokens viven en `frontend_gestion_documental/app/globals.css` dentro de `@theme` (Tailwind 4)
+y se usan como clases: `bg-marca`, `text-tinta-suave`, `border-borde-campo`, etc.
+**No escribir hexadecimales sueltos en componentes.**
 
-Los tokens se definen en `app/globals.css` con `@theme` de Tailwind 4 y se usan como
-clases (`bg-primario`, `text-texto-secundario`, …). No escribir colores hexadecimales
-sueltos en componentes.
+Si la universidad entrega manual de identidad, se ajustan los valores aquí y en `globals.css`.
 
-## Tokens base (propuestos)
+## Marca y acción
 
 | Token | Valor | Uso |
 |---|---|---|
-| `--color-primario` | `#1E3A8A` | Marca, navegación activa, botón primario |
-| `--color-primario-hover` | `#1E40AF` | Hover del primario |
-| `--color-fondo` | `#FFFFFF` | Fondo principal |
-| `--color-fondo-alt` | `#F8FAFC` | Fondo del panel, filas alternas |
-| `--color-borde` | `#E2E8F0` | Bordes y separadores |
-| `--color-texto` | `#0F172A` | Texto principal |
-| `--color-texto-secundario` | `#475569` | Etiquetas, metadatos |
-| `--color-peligro` | `#B91C1C` | Anular, deshabilitar, errores |
+| `marca` | `#243b8e` | Títulos, logo, texto de marca, navegación activa del portal |
+| `acento` | `#f4b400` | Botón primario, ítem activo del menú, pasos completados |
+| `acento-hover` | `#e0a500` | Hover del primario |
+| `acento-oscuro` | `#b07c00` | Antetítulos, texto sobre fondo claro con acento |
+| `acento-texto` | `#7a5a00` | Texto de insignias ámbar (contraste AA) |
+| `acento-claro` | `#fffbeb` | Fondo de avisos de plazo |
+| `sobre-acento` | `#0b1020` | Texto sobre el botón dorado (nunca blanco) |
+| `info` | `#0047cc` | Avisos informativos, enlaces dentro de texto, botón de contorno |
 
-## Colores de estado del radicado
+## Tinta y superficies
 
-Siempre acompañados de texto (accesibilidad). Fondo claro + texto oscuro del mismo tono.
+| Token | Valor | Uso |
+|---|---|---|
+| `tinta` | `#1e293b` | Texto principal |
+| `tinta-suave` | `#64748b` | Etiquetas, metadatos, texto secundario |
+| `tinta-profunda` | `#0f172a` | Bloque del número de radicado en la confirmación |
+| `fondo` | `#ffffff` | Fondo principal y tarjetas |
+| `fondo-alt` | `#f8fafc` | Menú lateral, cabecera de tablas, secciones alternas |
+| `fondo-sutil` | `#f1f5f9` | Encabezado del panel, línea de tiempo, campos de solo lectura |
+| `borde` | `#e2e8f0` | Bordes de tarjetas y separadores |
+| `borde-campo` | `#cbd5e1` | Bordes de campos de formulario |
 
-| Estado | Tono |
+## Estados del radicado (`components/ui/insignia.tsx`)
+
+Siempre texto + color, nunca solo color.
+
+| Estado | Estilo |
 |---|---|
-| `recibido` | gris azulado |
-| `enviado` / `recibido_dependencia` | azul |
-| `en_revision_requisitos` / `en_comite` | violeta |
-| `respondido` | verde |
-| `rechazado_requisitos` | naranja |
-| `anulado` | gris con texto tachado o etiqueta "Anulado" |
+| Radicado, Pendiente, Por verificar | `bg-info-claro text-info` |
+| En trámite, En revisión, Por clasificar | `bg-acento/20 text-acento-texto` |
+| En comité | violeta (`bg-violet-100 text-violet-800`) |
+| Respondido, Activo, Clasificado | `bg-exito-claro text-exito` |
+| Vencido | `bg-peligro-claro text-peligro` |
+| Anulado, Deshabilitado | `bg-fondo-sutil text-tinta-suave` (anulado además tachado) |
 
-## Semáforo de vencimiento (RF-015)
+## Semáforo de vencimiento (`IndicadorSemaforo`)
 
-| Situación | Tono |
-|---|---|
-| Al día | verde |
-| Próximo a vencer | ámbar |
-| Vencido | rojo |
-| En espera de comité | violeta (el retraso no es de la dependencia) |
+verde (`exito`) · amarillo (`acento`) · naranja (`orange-500`) · rojo (`peligro`), siempre con
+su texto. Los umbrales siguen pendientes (I-05).
 
 ## Contraste
 
-- Texto normal ≥ 4.5:1 y texto grande ≥ 3:1 (WCAG AA).
-- Texto sobre `--color-primario`: blanco.
-- Ámbar nunca como color de texto sobre blanco: usar fondo ámbar claro con texto oscuro.
+- Texto sobre `acento` → `sobre-acento`. Texto sobre `marca` o `tinta-profunda` → blanco.
+- El dorado nunca se usa como color de texto sobre blanco: usar `acento-oscuro` o `acento-texto`.
+- Foco visible: contorno de 2 px en `info` (definido globalmente en `:focus-visible`).
 
-## Modo oscuro
+## Forma
 
-La plantilla trae `prefers-color-scheme: dark`. No es requisito del F-02; si se mantiene,
-cada token debe tener su valor oscuro y los colores de estado deben conservar contraste.
+Esquinas rectas en todo el sistema. Única excepción: la barra de navegación del portal
+(píldora de vidrio, `rounded-full` con `backdrop-blur`).

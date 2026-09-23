@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<script src="./image-slot.js"></script>
+<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #ffffff; color: #1E293B; -webkit-font-smoothing: antialiased; }
+  a { color: #F4B400; }
+  a:hover { color: #ffd257; }
+  table { border-collapse: collapse; }
+  ::selection { background: #F4B400; color: #0b1020; }
+  input, select, textarea { font-family: inherit; color-scheme: light; }
+  button { font-family: inherit; }
+  input::placeholder, textarea::placeholder { color: #64748B; }
+</style>
+</helmet>
+<div style="display:flex; flex-direction:column; height:100vh; overflow:hidden; background:#ffffff">
+
+  <div style="display:flex; align-items:center; gap:24px; padding:0 20px; height:52px; background:#ffffff; border-bottom:1px solid rgba(30,41,59,.12); flex:0 0 auto">
+    <div style="display:flex; align-items:baseline; gap:10px">
+      <span style="font-family:Poppins,sans-serif; font-weight:800; font-size:13px; letter-spacing:.10em; color:#B07C00">SGD</span>
+      <span style="font-size:11px; color:#64748B">Maquetación de interfaz · v1.0</span>
+    </div>
+    <div style="display:flex; gap:4px; margin-left:auto">
+      <sc-for list="{{ roles }}" as="r" hint-placeholder-count="5">
+        <button onClick="{{ r.go }}" style="{{ r.tabStyle }}">{{ r.label }}</button>
+      </sc-for>
+    </div>
+    <button onClick="{{ toggleNotes }}" style="{{ notesBtnStyle }}">Notas del documento</button>
+  </div>
+
+  <div style="display:flex; flex:1 1 auto; min-height:0">
+
+    <div style="flex:1 1 auto; min-width:0; display:flex; flex-direction:column; background:#ffffff">
+
+      <sc-if value="{{ isInterno }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; align-items:center; gap:16px; padding:0 24px; height:62px; background:#F1F5F9; border-bottom:1px solid rgba(30,41,59,.12); flex:0 0 auto">
+          <image-slot id="logo-interno" style="width:38px;height:38px;flex:0 0 auto" shape="rect" fit="contain" placeholder="Logo"></image-slot>
+          <div style="line-height:1.3">
+            <div style="font-family:Poppins,sans-serif; font-size:13px; font-weight:600; color:#243b8e">Universidad Autónoma del Cauca</div>
+            <div style="font-size:11px; color:#64748B">Sistema de Gestión Documental</div>
+          </div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:18px">
+            <div style="position:relative">
+              <button onClick="{{ toggleAlerts }}" style="{{ alertsBtnStyle }}">
+                <i data-lucide="bell" style="width:15px;height:15px;flex:0 0 auto"></i>
+                Alertas
+                <span style="background:rgba(244,180,0,.22); color:#B07C00; font-size:11px; font-weight:700; padding:1px 7px">4</span>
+              </button>
+              <sc-if value="{{ alertsOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute; top:42px; right:0; width:400px; background:#fff; border:1px solid #E2E8F0; box-shadow:0 12px 32px rgba(15,23,42,.14); z-index:20">
+                  <div style="display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid #E2E8F0">
+                    <span style="font-family:Poppins,sans-serif; font-size:13px; font-weight:700; color:#243b8e; display:inline-flex; align-items:center; gap:8px"><i data-lucide="bell-ring" style="width:15px;height:15px;flex:0 0 auto"></i>Panel de vencimientos</span>
+                    <span style="margin-left:auto; font-size:11px; color:#64748B">4 radicados</span>
+                  </div>
+                  <sc-for list="{{ alertFlat }}" as="a" hint-placeholder-count="4">
+                    <div onClick="{{ a.go }}" style="{{ a.row }}">
+                      <span style="{{ a.dot }}"></span>
+                      <div style="flex:1 1 auto; min-width:0">
+                        <div style="font-family:Poppins,sans-serif; font-size:12.5px; font-weight:700; color:#1E293B">{{ a.num }}</div>
+                        <div style="font-size:11.5px; color:#64748B; margin-top:2px">{{ a.tipo }} · {{ a.dep }}</div>
+                      </div>
+                      <span style="{{ a.plazoStyle }}">{{ a.plazo }}</span>
+                    </div>
+                  </sc-for>
+                  <button onClick="{{ goAlertas }}" style="width:100%; text-align:left; background:#F8FAFC; border:0; border-top:1px solid #E2E8F0; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#243b8e; padding:12px 16px; cursor:pointer; display:flex; align-items:center; gap:8px"><i data-lucide="list" style="width:15px;height:15px;flex:0 0 auto"></i>Ver todas las alertas de vencimiento</button>
+                </div>
+              </sc-if>
+            </div>
+            <div style="width:1px; height:26px; background:rgba(30,41,59,.14)"></div>
+            <div style="text-align:right; line-height:1.3">
+              <div style="font-size:12px; font-weight:600; color:#1E293B">{{ userName }}</div>
+              <div style="font-size:11px; color:#64748B">{{ userRole }}</div>
+            </div>
+            <button onClick="{{ goLogin }}" style="border:1px solid rgba(30,41,59,.18); background:transparent; color:#64748B; font-size:11px; font-weight:500; padding:7px 12px; cursor:pointer; display:inline-flex; align-items:center; gap:7px"><i data-lucide="log-out" style="width:14px;height:14px;flex:0 0 auto"></i>Cerrar sesión</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex; flex:1 1 auto; min-height:0">
+
+        <sc-if value="{{ isInterno }}" hint-placeholder-val="{{ true }}">
+          <div style="width:238px; flex:0 0 auto; background:#F8FAFC; border-right:1px solid rgba(30,41,59,.12); padding:18px 12px; overflow:auto">
+            <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#64748B; font-weight:700; padding:0 10px 12px">{{ moduleLabel }}</div>
+            <div style="display:flex; flex-direction:column; gap:2px">
+              <sc-for list="{{ menu }}" as="m" hint-placeholder-count="5">
+                <sc-if value="{{ m.isHeader }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#64748B; font-weight:700; padding:18px 10px 10px; margin-top:12px; border-top:1px solid #E2E8F0">{{ m.label }}</div>
+                </sc-if>
+                <sc-if value="{{ m.isItem }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ m.go }}" style="{{ m.style }}">
+                    <i data-lucide="{{ m.icon }}" style="width:16px; height:16px; flex:0 0 auto"></i>
+                    {{ m.label }}
+                  </button>
+                </sc-if>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="flex:1 1 auto; min-width:0; overflow:auto">
+
+          <!-- ===== INICIO DE SESIÓN (PANEL INTERNO) ===== -->
+          <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+            <div style="min-height:100%; display:grid; grid-template-columns:1fr 1fr; align-items:stretch">
+              <div style="background:#F8FAFC; border-right:1px solid #E2E8F0; padding:56px 48px; display:flex; flex-direction:column; justify-content:center">
+                <image-slot id="logo-login" style="width:230px;height:230px;margin-bottom:36px" shape="rect" fit="contain" placeholder="Logo de la universidad"></image-slot>
+                <div style="font-family:Poppins,sans-serif; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#B07C00; margin-bottom:16px">Panel interno</div>
+                <h1 style="font-family:Poppins,sans-serif; font-size:34px; line-height:1.15; font-weight:800; color:#243b8e; margin:0 0 16px; letter-spacing:-.02em">Sistema de Gestión Documental</h1>
+                <p style="margin:0; font-size:14px; line-height:1.65; color:#64748B; max-width:380px; text-wrap:pretty">Acceso para Recepción, dependencias, Archivo Central y administración. Cada usuario ve solo los módulos que su rol permite.</p>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:center; padding:56px 48px">
+                <div style="width:100%; max-width:380px">
+                  <div style="font-family:Poppins,sans-serif; font-size:20px; font-weight:700; color:#243b8e; margin-bottom:6px">Inicia sesión</div>
+                  <p style="margin:0 0 26px; font-size:13px; line-height:1.6; color:#64748B">Usa el usuario institucional asignado por TIC.</p>
+                  <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Usuario institucional</label>
+                  <input placeholder="usuario@uniautonoma.edu.co" style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; background:#fff; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:16px" />
+                  <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Contraseña</label>
+                  <input type="password" value="123456789" style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; background:#fff; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:20px" />
+                  <button onClick="{{ goRec1 }}" style="width:100%; background:#F4B400; color:#0b1020; border:0; font-family:Poppins,sans-serif; font-size:14px; font-weight:700; padding:14px; cursor:pointer; display:flex; align-items:center; gap:9px"><i data-lucide="log-in" style="width:17px;height:17px;flex:0 0 auto"></i>Entrar</button>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:16px; border-top:1px solid #E2E8F0; font-size:12px; color:#64748B">
+                    <span>¿Olvidaste tu contraseña?</span>
+                    <span style="color:#243b8e; font-weight:600">Recuperar acceso</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ===== PORTAL PÚBLICO (LANDING) ===== -->
+          <sc-if value="{{ isPortal }}" hint-placeholder-val="{{ false }}">
+            <div style="min-height:100%; background:#ffffff">
+
+              <div style="position:sticky; top:0; z-index:30; padding:16px 32px 8px">
+                <div style="max-width:1180px; margin:0 auto; display:flex; align-items:center; gap:18px; padding:9px 10px 9px 16px; background:rgba(255,255,255,.62); backdrop-filter:blur(22px) saturate(180%); -webkit-backdrop-filter:blur(22px) saturate(180%); border:1px solid rgba(255,255,255,.85); border-radius:999px; box-shadow:0 10px 34px rgba(15,23,42,.13), inset 0 1px 0 rgba(255,255,255,.9)">
+                  <image-slot id="logo-portal" style="width:38px;height:38px;flex:0 0 auto" shape="circle" fit="contain" placeholder="Logo"></image-slot>
+                  <div style="flex:1 1 auto; display:flex; justify-content:center; gap:6px">
+                    <sc-for list="{{ portalNav }}" as="n" hint-placeholder-count="4">
+                      <button onClick="{{ n.go }}" style="{{ n.style }}">
+                        <i data-lucide="{{ n.icon }}" style="width:15px; height:15px; flex:0 0 auto"></i>
+                        {{ n.label }}
+                      </button>
+                    </sc-for>
+                  </div>
+                  <button onClick="{{ goLogin }}" style="flex:0 0 auto; background:#F4B400; color:#0b1020; border:0; border-radius:999px; font-family:Poppins,sans-serif; font-size:13px; font-weight:700; padding:11px 22px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="shield-check" style="width:16px;height:16px;flex:0 0 auto"></i>Iniciar sesión</button>
+                </div>
+              </div>
+
+              <!-- Landing -->
+              <sc-if value="{{ isEst1 }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <div style="display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:start; padding:64px 44px 56px; max-width:1180px; margin:0 auto">
+                    <div>
+                      <div style="font-family:Poppins,sans-serif; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#B07C00; margin-bottom:20px">Portal de estudiantes</div>
+                      <h1 style="font-family:Poppins,sans-serif; font-size:46px; line-height:1.1; font-weight:800; color:#243b8e; margin:0 0 18px; letter-spacing:-.02em; text-wrap:balance">Radica tu solicitud sin ir a ventanilla</h1>
+                      <p style="margin:0 0 30px; font-size:16px; line-height:1.65; color:#64748B; max-width:520px; text-wrap:pretty">Reingreso, reintegro de dinero, homologación, trabajo de grado o tutela. Adjuntas tus documentos, recibes un número de radicado y la respuesta llega a tu correo institucional.</p>
+                      <div style="display:flex; gap:26px; flex-wrap:wrap">
+                        <sc-for list="{{ landingStats }}" as="s" hint-placeholder-count="3">
+                          <div style="border-left:2px solid #F4B400; padding-left:14px">
+                            <div style="font-family:Poppins,sans-serif; font-size:22px; font-weight:800; color:#1E293B">{{ s.value }}</div>
+                            <div style="font-size:12px; color:#64748B; margin-top:2px">{{ s.label }}</div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+
+                    <div style="background:#fff; border:1px solid #E2E8F0">
+                      <image-slot id="hero-estudiantes" style="width:100%;height:180px;display:block" shape="rect" fit="cover" placeholder="Foto de estudiantes en el campus"></image-slot>
+                      <div style="padding:26px 32px 32px">
+                      <div style="font-family:Poppins,sans-serif; font-size:18px; font-weight:700; color:#243b8e; margin-bottom:6px">Ingresa para radicar</div>
+                      <p style="margin:0 0 22px; font-size:13px; line-height:1.6; color:#64748B">Usa tu correo institucional o tu número de cédula. Te enviaremos un código de verificación.</p>
+                      <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Correo institucional o cédula</label>
+                      <input placeholder="nombre.apellido@uniautonoma.edu.co" style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:16px; border-radius:0" />
+                      <button onClick="{{ goEst2 }}" style="width:100%; background:#F4B400; color:#0b1020; border:0; font-family:Poppins,sans-serif; font-size:14px; font-weight:700; padding:14px; cursor:pointer; display:flex; align-items:center; gap:9px"><i data-lucide="arrow-right" style="width:17px;height:17px;flex:0 0 auto"></i>Continuar</button>
+                      <div style="display:flex; gap:10px; margin-top:18px; padding-top:16px; border-top:1px solid #E2E8F0; font-size:12px; line-height:1.55; color:#64748B">
+                        <span style="color:#0047CC; font-weight:700">i</span>
+                        Mecanismo de identificación pendiente de confirmar con TI: código al correo o validación contra el sistema académico.
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="border-top:1px solid rgba(30,41,59,.12); background:#F8FAFC">
+                    <div style="max-width:1180px; margin:0 auto; padding:48px 44px">
+                      <div style="font-family:Poppins,sans-serif; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#64748B; margin-bottom:26px">Cómo funciona</div>
+                      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:rgba(30,41,59,.12)">
+                        <sc-for list="{{ landingSteps }}" as="p" hint-placeholder-count="3">
+                          <div style="background:#F8FAFC">
+                            <image-slot id="{{ p.slot }}" style="width:100%;height:150px;display:block" shape="rect" fit="cover" placeholder="{{ p.alt }}"></image-slot>
+                            <div style="padding:22px 26px 28px">
+                            <div style="font-family:Poppins,sans-serif; font-size:13px; font-weight:800; color:#0b1020; background:#F4B400; width:26px; height:26px; display:grid; place-items:center; margin-bottom:16px">{{ p.n }}</div>
+                            <div style="font-family:Poppins,sans-serif; font-size:15px; font-weight:600; margin-bottom:8px; color:#243b8e">{{ p.title }}</div>
+                            <div style="font-size:13px; line-height:1.65; color:#64748B; text-wrap:pretty">{{ p.body }}</div>
+                            </div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </div>
+
+                  <image-slot id="banda-campus" style="width:100%;height:260px;display:block" shape="rect" fit="cover" placeholder="Imagen ancha del campus o de la ventanilla de recepción"></image-slot>
+
+                  <div style="border-top:1px solid rgba(30,41,59,.12)">
+                    <div style="max-width:1180px; margin:0 auto; padding:48px 44px 64px; display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start">
+                      <div>
+                        <div style="font-family:Poppins,sans-serif; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#64748B; margin-bottom:20px">Trámites disponibles</div>
+                        <div style="display:flex; flex-wrap:wrap; gap:8px">
+                          <sc-for list="{{ tramites }}" as="t" hint-placeholder-count="6">
+                            <span style="border:1px solid rgba(30,41,59,.18); color:#1E293B; font-size:13px; padding:8px 14px">{{ t }}</span>
+                          </sc-for>
+                        </div>
+                      </div>
+                      <div style="background:#F1F5F9; border-left:2px solid #0047CC; padding:24px 26px">
+                        <div style="font-family:Poppins,sans-serif; font-size:15px; font-weight:600; color:#243b8e; margin-bottom:10px">La respuesta llega por correo</div>
+                        <p style="margin:0; font-size:13px; line-height:1.7; color:#64748B; text-wrap:pretty">El portal solo sirve para radicar. Una vez la dependencia responde, recibes el documento en tu correo institucional junto con copia a Recepción y Registro Académico.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- Nueva solicitud -->
+              <sc-if value="{{ isEst2 }}" hint-placeholder-val="{{ false }}">
+                <div style="max-width:720px; margin:0 auto; padding:48px 24px 72px">
+                  <div style="display:flex; gap:6px; margin-bottom:26px">
+                    <div style="height:3px; flex:1; background:#F4B400"></div>
+                    <div style="height:3px; flex:1; background:#F4B400"></div>
+                    <div style="height:3px; flex:1; background:rgba(30,41,59,.16)"></div>
+                  </div>
+                  <h1 style="font-family:Poppins,sans-serif; font-size:30px; font-weight:800; color:#243b8e; margin:0 0 26px; letter-spacing:-.015em">Nueva solicitud</h1>
+
+                  <div style="background:#fff; border:1px solid #E2E8F0; padding:32px 34px">
+                    <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Tipo de trámite</label>
+                    <select style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:20px; background:#fff">
+                      <option>Reingreso</option>
+                      <option>Reintegro de dinero</option>
+                      <option>Homologación</option>
+                      <option>Trabajo de grado</option>
+                      <option>Tutela</option>
+                      <option>Otro</option>
+                    </select>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px">
+                      <div>
+                        <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Nombre del solicitante</label>
+                        <input value="Laura Camila Chicangana" readonly="" style="width:100%; box-sizing:border-box; font-size:14px; padding:12px 14px; border:1px solid #E2E8F0; background:#F1F5F9; color:#64748B" />
+                      </div>
+                      <div>
+                        <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Cédula</label>
+                        <input value="1.061.784.220" readonly="" style="width:100%; box-sizing:border-box; font-size:14px; padding:12px 14px; border:1px solid #E2E8F0; background:#F1F5F9; color:#64748B" />
+                      </div>
+                    </div>
+
+                    <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Programa o carrera</label>
+                    <select style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:20px; background:#fff">
+                      <option>Ingeniería de Sistemas</option>
+                      <option>Ingeniería Ambiental</option>
+                      <option>Ingeniería Industrial</option>
+                      <option>Derecho</option>
+                      <option>Contaduría Pública</option>
+                      <option>Administración de Empresas</option>
+                      <option>Psicología</option>
+                      <option>Enfermería</option>
+                      <option>Fisioterapia</option>
+                      <option>Comunicación Social</option>
+                    </select>
+
+                    <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Descripción de la solicitud</label>
+                    <textarea rows="4" placeholder="Explica brevemente qué solicitas" style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:20px; resize:vertical"></textarea>
+
+                    <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Documentos adjuntos</label>
+                    <div style="border:1.5px dashed #CBD5E1; padding:24px; text-align:center; color:#64748B; font-size:13px; margin-bottom:6px; background:#F8FAFC">
+                      <span style="display:block; margin-bottom:8px"><i data-lucide="upload-cloud" style="width:22px;height:22px;flex:0 0 auto"></i></span>Arrastra archivos o <span style="color:#0047CC; font-weight:600; text-decoration:underline">selecciónalos</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748B; margin-bottom:20px">PDF o imagen · hasta 100 MB por envío</div>
+
+                    <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">Correo de contacto para la respuesta</label>
+                    <input value="laura.chicangana@uniautonoma.edu.co" style="width:100%; box-sizing:border-box; font-size:14px; color:#1E293B; padding:12px 14px; border:1px solid #CBD5E1; margin-bottom:28px" />
+
+                    <div style="display:flex; gap:10px">
+                      <button onClick="{{ goEst3 }}" style="flex:1; background:#F4B400; color:#0b1020; border:0; font-family:Poppins,sans-serif; font-size:14px; font-weight:700; padding:14px; cursor:pointer; display:flex; align-items:center; gap:9px"><i data-lucide="send" style="width:17px;height:17px;flex:0 0 auto"></i>Enviar solicitud</button>
+                      <button onClick="{{ goEst1 }}" style="background:#fff; color:#1E293B; border:1px solid #CBD5E1; font-size:14px; padding:14px 24px; cursor:pointer">Cancelar</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- Confirmación -->
+              <sc-if value="{{ isEst3 }}" hint-placeholder-val="{{ false }}">
+                <div style="max-width:720px; margin:0 auto; padding:48px 24px 72px">
+                  <div style="display:flex; gap:6px; margin-bottom:26px">
+                    <div style="height:3px; flex:1; background:#F4B400"></div>
+                    <div style="height:3px; flex:1; background:#F4B400"></div>
+                    <div style="height:3px; flex:1; background:#F4B400"></div>
+                  </div>
+                  <div style="background:#fff; border:1px solid #E2E8F0; padding:36px 34px">
+                    <div style="font-family:Poppins,sans-serif; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#0047CC; margin-bottom:14px">Solicitud radicada</div>
+                    <h1 style="font-family:Poppins,sans-serif; font-size:26px; font-weight:800; color:#243b8e; margin:0 0 8px; letter-spacing:-.015em">Tu solicitud quedó registrada</h1>
+                    <p style="margin:0 0 26px; color:#64748B; font-size:14px">Guarda este número para cualquier consulta.</p>
+                    <div style="background:#0F172A; padding:26px 28px; margin-bottom:22px">
+                      <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#CBD5E1; font-weight:700; margin-bottom:8px">Número de radicado</div>
+                      <div style="font-family:Poppins,sans-serif; font-size:34px; font-weight:800; color:#FFC526; letter-spacing:-.01em">2026-CR-01487</div>
+                      <div style="font-size:13px; color:#CBD5E1; margin-top:8px">1 de septiembre de 2026 · 10:24 a. m.</div>
+                    </div>
+                    <div style="border-left:2px solid #0047CC; background:#F1F5F9; padding:14px 16px; font-size:13px; color:#1E293B; line-height:1.6; margin-bottom:28px">
+                      Tu respuesta llegará a tu correo institucional. No es necesario que vuelvas al portal.
+                    </div>
+                    <div style="display:flex; gap:10px">
+                      <button style="flex:1; background:#F4B400; color:#0b1020; border:0; font-family:Poppins,sans-serif; font-size:14px; font-weight:700; padding:13px; cursor:pointer; display:flex; align-items:center; gap:9px"><i data-lucide="download" style="width:16px;height:16px;flex:0 0 auto"></i>Descargar comprobante (PDF)</button>
+                      <button onClick="{{ goEst2 }}" style="background:#fff; color:#1E293B; border:1px solid #CBD5E1; font-size:14px; padding:13px 20px; cursor:pointer">Radicar otra</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- Mis trámites -->
+              <sc-if value="{{ isEst4 }}" hint-placeholder-val="{{ false }}">
+                <div style="max-width:900px; margin:0 auto; padding:48px 24px 72px">
+                  <div style="display:inline-flex; align-items:center; gap:8px; background:#FFFBEB; border:1px solid #F4B400; font-family:Poppins,sans-serif; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#B07C00; padding:6px 12px; margin-bottom:18px">
+                    <i data-lucide="flag" style="width:13px;height:13px;flex:0 0 auto"></i>
+                    Propuesta a confirmar
+                  </div>
+                  <h1 style="font-family:Poppins,sans-serif; font-size:30px; font-weight:800; color:#243b8e; margin:0 0 10px; letter-spacing:-.015em">Mis trámites</h1>
+                  <p style="margin:0 0 26px; font-size:14px; line-height:1.65; color:#64748B; max-width:620px; text-wrap:pretty">Ingresa tu número de cédula para ver el estado de las solicitudes radicadas a tu nombre. La respuesta sigue llegando a tu correo institucional; esta pantalla es solo de lectura.</p>
+
+                  <div style="background:#fff; border:1px solid #E2E8F0; padding:22px 24px; margin-bottom:26px">
+                    <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:8px">Número de cédula</label>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap">
+                      <input value="{{ cedulaInput }}" onChange="{{ onCedula }}" placeholder="p. ej. 1.061.784.220" style="flex:1 1 260px; min-width:200px; box-sizing:border-box; font-size:14px; color:#1E293B; background:#fff; padding:12px 14px; border:1px solid #CBD5E1" />
+                      <button onClick="{{ buscarTramites }}" style="flex:0 0 auto; background:#F4B400; color:#0b1020; border:0; font-family:Poppins,sans-serif; font-size:13px; font-weight:700; padding:12px 22px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="search" style="width:15px;height:15px;flex:0 0 auto"></i>Buscar mis trámites</button>
+                    </div>
+                    <div style="font-size:11.5px; color:#64748B; margin-top:9px">Solo se muestran las solicitudes radicadas con esa cédula.</div>
+                  </div>
+
+                  <sc-if value="{{ sinBusqueda }}" hint-placeholder-val="{{ true }}">
+                    <div style="border:1px dashed #CBD5E1; background:#F8FAFC; padding:44px 24px; text-align:center">
+                      <i data-lucide="search" style="width:26px;height:26px;color:#94A3B8"></i>
+                      <div style="font-family:Poppins,sans-serif; font-size:15px; font-weight:600; color:#1E293B; margin-top:12px">Escribe tu cédula para consultar</div>
+                      <div style="font-size:13px; color:#64748B; margin-top:6px">Verás el número de radicado, la dependencia y el estado de cada solicitud.</div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ sinResultados }}" hint-placeholder-val="{{ false }}">
+                    <div style="border:1px solid #E2E8F0; background:#fff; padding:36px 24px; text-align:center">
+                      <i data-lucide="file-x" style="width:24px;height:24px;color:#94A3B8"></i>
+                      <div style="font-family:Poppins,sans-serif; font-size:15px; font-weight:600; color:#1E293B; margin-top:12px">No encontramos solicitudes con esa cédula</div>
+                      <div style="font-size:13px; color:#64748B; margin-top:6px">Revisa el número o radica una nueva solicitud.</div>
+                    </div>
+                  </sc-if>
+                </div>
+
+                <sc-if value="{{ conResultados }}" hint-placeholder-val="{{ false }}">
+                <div style="max-width:900px; margin:0 auto; padding:0 24px 72px">
+                  <div style="display:flex; align-items:center; gap:10px; font-size:13px; color:#64748B; margin-bottom:16px">
+                    <i data-lucide="user" style="width:15px;height:15px;flex:0 0 auto"></i>
+                    <span><strong style="color:#1E293B">{{ titularNombre }}</strong> · {{ titularCedula }} · {{ resultadosTexto }}</span>
+                  </div>
+
+                  <div style="display:flex; gap:2px; background:#E2E8F0; border:1px solid #E2E8F0; margin-bottom:28px">
+                    <sc-for list="{{ tramiteResumen }}" as="r" hint-placeholder-count="3">
+                      <div style="flex:1; background:#fff; padding:18px 20px">
+                        <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#64748B; margin-bottom:8px">
+                          <i data-lucide="{{ r.icon }}" style="width:15px;height:15px;flex:0 0 auto"></i>
+                          {{ r.label }}
+                        </div>
+                        <div style="font-family:Poppins,sans-serif; font-size:26px; font-weight:800; color:#243b8e; line-height:1">{{ r.value }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+
+                  <div style="display:flex; flex-direction:column; gap:2px; background:#E2E8F0; border:1px solid #E2E8F0">
+                    <sc-for list="{{ misTramites }}" as="t" hint-placeholder-count="4">
+                      <div style="background:#fff; padding:18px 22px; display:flex; align-items:center; gap:20px">
+                        <i data-lucide="{{ t.icon }}" style="width:20px;height:20px;flex:0 0 auto; color:#B07C00"></i>
+                        <div style="flex:1 1 auto; min-width:0">
+                          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+                            <span style="font-family:Poppins,sans-serif; font-size:14px; font-weight:700; color:#1E293B">{{ t.tipo }}</span>
+                            <span style="{{ t.badge }}">{{ t.estado }}</span>
+                          </div>
+                          <div style="font-size:12.5px; color:#64748B; margin-top:4px">{{ t.num }} · {{ t.dep }} · radicado el {{ t.fecha }}</div>
+                        </div>
+                        <div style="flex:0 0 auto; text-align:right">
+                          <div style="font-size:12px; color:#64748B">{{ t.plazo }}</div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+
+                  <div style="display:flex; align-items:center; gap:14px; margin-top:28px; background:#F8FAFC; border-left:2px solid #0047CC; padding:16px 20px">
+                    <i data-lucide="mail" style="width:18px;height:18px;flex:0 0 auto; color:#0047CC"></i>
+                    <div style="flex:1 1 auto; font-size:13px; line-height:1.6; color:#1E293B">Cuando la dependencia responda, recibirás el documento en tu correo institucional.</div>
+                    <button onClick="{{ goEst2 }}" style="flex:0 0 auto; background:#F4B400; color:#0b1020; border:0; font-family:Poppins,sans-serif; font-size:13px; font-weight:700; padding:11px 18px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="file-pen-line" style="width:15px;height:15px;flex:0 0 auto"></i>Radicar otra solicitud</button>
+                  </div>
+                </div>
+                </sc-if>
+              </sc-if>
+
+            </div>
+          </sc-if>
+
+          <!-- ===== PANEL INTERNO ===== -->
+          <sc-if value="{{ isInterno }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:28px 30px 44px">
+
+              <div style="display:flex; align-items:flex-end; gap:16px; margin-bottom:22px">
+                <div>
+                  <h1 style="font-family:Poppins,sans-serif; font-size:22px; margin:0; font-weight:700; color:#243b8e; letter-spacing:-.015em">{{ screenTitle }}</h1>
+                  <div style="font-size:13px; color:#64748B; margin-top:5px">{{ screenObjetivo }}</div>
+                </div>
+                <sc-if value="{{ showBandejaActions }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-left:auto; display:flex; gap:8px">
+                    <button onClick="{{ goRec3 }}" style="background:transparent; border:1px solid rgba(30,41,59,.20); color:#1E293B; font-size:12px; font-weight:500; padding:10px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="package" style="width:15px;height:15px;flex:0 0 auto"></i>Registrar sin consecutivo</button>
+                    <button onClick="{{ goRec2 }}" style="background:#F4B400; border:0; color:#0b1020; font-family:Poppins,sans-serif; font-size:12px; font-weight:700; padding:10px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="file-plus" style="width:15px;height:15px;flex:0 0 auto"></i>Nueva radicación</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ showVolver }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ goBack }}" style="margin-left:auto; background:transparent; border:1px solid rgba(30,41,59,.20); color:#64748B; font-size:12px; padding:10px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:7px"><i data-lucide="arrow-left" style="width:15px;height:15px;flex:0 0 auto"></i>Volver</button>
+                </sc-if>
+              </div>
+
+              <sc-if value="{{ isTableScreen }}" hint-placeholder-val="{{ true }}">
+                <div style="background:#fff; border:1px solid #E2E8F0">
+                  <div style="display:flex; gap:8px; padding:16px 18px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; align-items:center">
+                    <input placeholder="{{ searchPlaceholder }}" style="flex:1 1 240px; min-width:200px; font-size:13px; color:#1E293B; padding:9px 12px; border:1px solid #CBD5E1" />
+                    <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+                      <select style="font-size:12px; padding:9px 10px; border:1px solid #CBD5E1; background:#fff; color:#64748B">
+                        <option>{{ f }}</option>
+                      </select>
+                    </sc-for>
+                  </div>
+                  <table style="width:100%; font-size:13px">
+                    <thead>
+                      <tr>
+                        <sc-for list="{{ columns }}" as="c" hint-placeholder-count="6">
+                          <th style="text-align:left; font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:#64748B; font-weight:600; padding:12px 18px; background:#F8FAFC; border-bottom:1px solid #E2E8F0; white-space:nowrap">{{ c }}</th>
+                        </sc-for>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <sc-for list="{{ rows }}" as="row" hint-placeholder-count="6">
+                        <tr onClick="{{ row.go }}" style="cursor:pointer; border-bottom:1px solid #F1F5F9">
+                          <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="6">
+                            <td style="{{ cell.style }}">
+                              <sc-if value="{{ cell.isBadge }}" hint-placeholder-val="{{ false }}">
+                                <span style="{{ cell.badge }}">{{ cell.text }}</span>
+                              </sc-if>
+                              <sc-if value="{{ cell.isPlain }}" hint-placeholder-val="{{ true }}">{{ cell.text }}</sc-if>
+                            </td>
+                          </sc-for>
+                        </tr>
+                      </sc-for>
+                    </tbody>
+                  </table>
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 18px; font-size:12px; color:#64748B; border-top:1px solid #E2E8F0">
+                    <span>{{ paginationText }}</span>
+                    <div style="display:flex; gap:6px">
+                      <button style="border:1px solid #CBD5E1; background:#fff; font-size:12px; padding:6px 11px; color:#64748B; cursor:pointer">Anterior</button>
+                      <button style="border:1px solid #CBD5E1; background:#fff; font-size:12px; padding:6px 11px; color:#1E293B; cursor:pointer">Siguiente</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isFicha }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid; grid-template-columns:1.35fr 1fr; gap:20px; align-items:start">
+                  <div style="background:#fff; border:1px solid #E2E8F0; padding:26px 28px">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px">
+                      <div style="font-family:Poppins,sans-serif; font-size:22px; font-weight:800; color:#243b8e; letter-spacing:-.01em">2026-CR-01487</div>
+                      <span style="background:rgba(244,180,0,.20); color:#7A5A00; font-size:11px; font-weight:700; padding:4px 10px">En trámite</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px 20px; font-size:13px; color:#1E293B; margin-bottom:24px">
+                      <div><div style="font-family:Poppins,sans-serif; font-size:11px; color:#64748B; text-transform:uppercase; letter-spacing:.09em; font-weight:600; margin-bottom:4px">Tipo de trámite</div>Homologación</div>
+                      <div><div style="font-family:Poppins,sans-serif; font-size:11px; color:#64748B; text-transform:uppercase; letter-spacing:.09em; font-weight:600; margin-bottom:4px">Solicitante</div>Laura Camila Chicangana · 1.061.784.220</div>
+                      <div><div style="font-family:Poppins,sans-serif; font-size:11px; color:#64748B; text-transform:uppercase; letter-spacing:.09em; font-weight:600; margin-bottom:4px">Dependencia asignada</div>Facultad de Ingeniería</div>
+                      <div><div style="font-family:Poppins,sans-serif; font-size:11px; color:#64748B; text-transform:uppercase; letter-spacing:.09em; font-weight:600; margin-bottom:4px">Radicado el</div>1 sep 2026 · 10:24 a. m.</div>
+                    </div>
+                    <div style="border-left:2px solid #F4B400; background:#FFFBEB; padding:13px 15px; font-size:13px; color:#1E293B; margin-bottom:22px">
+                      <span style="display:inline-flex; align-items:center; gap:8px"><i data-lucide="clock" style="width:15px;height:15px;flex:0 0 auto"></i><strong style="font-family:Poppins,sans-serif; font-weight:600">Plazo de respuesta:</strong></span> 15 días hábiles · <strong>quedan 6 días</strong>
+                    </div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; border:1px solid #E2E8F0; padding:13px 15px; font-size:13px; color:#1E293B; margin-bottom:24px">
+                      <span style="display:inline-flex; align-items:center; gap:9px"><i data-lucide="file-text" style="width:16px;height:16px;flex:0 0 auto"></i>solicitud-homologacion.pdf · 2,4 MB</span>
+                      <button style="border:1px solid #CBD5E1; background:#fff; font-size:12px; padding:7px 13px; color:#1E293B; cursor:pointer; display:inline-flex; align-items:center; gap:7px"><i data-lucide="download" style="width:14px;height:14px;flex:0 0 auto"></i>Descargar</button>
+                    </div>
+                    <div style="display:flex; gap:8px">
+                      <sc-for list="{{ fichaActions }}" as="a" hint-placeholder-count="2">
+                        <button onClick="{{ a.go }}" style="{{ a.style }}">{{ a.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="background:#F1F5F9; padding:26px 28px">
+                    <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:#64748B; font-weight:700; margin-bottom:20px; display:flex; align-items:center; gap:8px"><i data-lucide="git-commit-vertical" style="width:14px;height:14px;flex:0 0 auto"></i>Línea de tiempo de trazabilidad</div>
+                    <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="4">
+                      <div style="display:grid; grid-template-columns:12px 1fr; gap:14px">
+                        <div style="display:flex; flex-direction:column; align-items:center">
+                          <span style="{{ t.dot }}"></span>
+                          <span style="{{ t.line }}"></span>
+                        </div>
+                        <div style="padding-bottom:20px">
+                          <div style="font-family:Poppins,sans-serif; font-size:13px; font-weight:600; color:#1E293B">{{ t.estado }}</div>
+                          <div style="font-size:12px; color:#64748B; margin-top:3px">{{ t.quien }}</div>
+                          <div style="font-size:11px; color:#64748B; margin-top:2px">{{ t.cuando }}</div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#fff; border:1px solid #E2E8F0; padding:28px 30px; max-width:740px">
+                  <sc-if value="{{ formNote }}" hint-placeholder-val="{{ false }}">
+                    <div style="border-left:2px solid #0047CC; background:#F1F5F9; padding:13px 15px; font-size:12px; color:#1E293B; line-height:1.6; margin-bottom:24px">{{ formNote }}</div>
+                  </sc-if>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px 20px">
+                    <sc-for list="{{ formFields }}" as="f" hint-placeholder-count="5">
+                      <div style="{{ f.wrap }}">
+                        <label style="display:block; font-family:Poppins,sans-serif; font-size:12px; font-weight:600; color:#1E293B; margin-bottom:7px">{{ f.label }}</label>
+                        <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                          <select style="width:100%; box-sizing:border-box; font-size:13px; color:#1E293B; padding:11px 12px; border:1px solid #CBD5E1; background:#fff">
+                            <option>{{ f.value }}</option>
+                          </select>
+                        </sc-if>
+                        <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                          <input placeholder="{{ f.value }}" style="width:100%; box-sizing:border-box; font-size:13px; color:#1E293B; padding:11px 12px; border:1px solid #CBD5E1" />
+                        </sc-if>
+                        <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}">
+                          <textarea rows="4" placeholder="{{ f.value }}" style="width:100%; box-sizing:border-box; font-size:13px; color:#1E293B; padding:11px 12px; border:1px solid #CBD5E1; resize:vertical"></textarea>
+                        </sc-if>
+                        <sc-if value="{{ f.isFile }}" hint-placeholder-val="{{ false }}">
+                          <div style="border:1.5px dashed #CBD5E1; padding:20px; text-align:center; color:#64748B; font-size:12px; background:#F8FAFC"><span style="display:block; margin-bottom:6px"><i data-lucide="upload-cloud" style="width:20px;height:20px;flex:0 0 auto"></i></span>Arrastra el archivo o <span style="color:#0047CC; font-weight:600; text-decoration:underline">selecciónalo</span></div>
+                        </sc-if>
+                        <sc-if value="{{ f.hint }}" hint-placeholder-val="{{ false }}">
+                          <div style="font-size:11px; color:#64748B; margin-top:6px">{{ f.hint }}</div>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display:flex; gap:8px; margin-top:28px; padding-top:22px; border-top:1px solid #E2E8F0">
+                    <sc-for list="{{ formActions }}" as="a" hint-placeholder-count="2">
+                      <button onClick="{{ a.go }}" style="{{ a.style }}">{{ a.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isAlertas }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:20px; max-width:940px">
+                  <sc-for list="{{ alertGroups }}" as="g" hint-placeholder-count="3">
+                    <div>
+                      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px">
+                        <span style="{{ g.dot }}"></span>
+                        <span style="font-family:Poppins,sans-serif; font-size:13px; font-weight:600">{{ g.label }}</span>
+                        <span style="font-size:12px; color:#64748B">{{ g.count }}</span>
+                      </div>
+                      <div style="display:flex; flex-direction:column; gap:8px">
+                        <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="2">
+                          <div onClick="{{ i.go }}" style="{{ i.card }}">
+                            <div style="flex:0 0 140px; font-family:Poppins,sans-serif; font-size:14px; font-weight:700; color:#1E293B">{{ i.num }}</div>
+                            <div style="flex:1 1 auto; min-width:0; font-size:13px; color:#1E293B">{{ i.tipo }}<span style="color:#64748B"> · {{ i.dep }}</span></div>
+                            <sc-if value="{{ i.comite }}" hint-placeholder-val="{{ false }}">
+                              <span style="background:rgba(0,71,204,.10); color:#0047CC; font-size:11px; font-weight:700; padding:4px 10px; white-space:nowrap">Espera de comité</span>
+                            </sc-if>
+                            <div style="{{ i.plazoStyle }}">{{ i.plazo }}</div>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isComite }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#fff; border:1px solid #E2E8F0; padding:28px 30px; max-width:780px">
+                  <div style="display:flex; align-items:center; gap:12px; margin-bottom:26px; flex-wrap:wrap">
+                    <div style="font-family:Poppins,sans-serif; font-size:20px; font-weight:800; color:#243b8e">2026-CR-01455</div>
+                    <span style="background:rgba(0,71,204,.10); color:#0047CC; font-size:11px; font-weight:700; padding:4px 10px">En revisión de requisitos</span>
+                    <span style="font-size:12px; color:#64748B">Trabajo de grado · Andrés F. Muñoz</span>
+                  </div>
+                  <div style="display:flex; margin-bottom:26px">
+                    <sc-for list="{{ comiteSteps }}" as="s" hint-placeholder-count="3">
+                      <div style="{{ s.style }}">{{ s.label }}</div>
+                    </sc-for>
+                  </div>
+                  <div style="border-left:2px solid #F4B400; background:#FFFBEB; padding:14px 16px; font-size:13px; color:#1E293B; margin-bottom:26px">
+                    Próxima reunión del comité: <strong>18 de septiembre de 2026</strong> (estimada)
+                  </div>
+                  <div style="display:flex; gap:8px; flex-wrap:wrap">
+                    <button style="background:#F4B400; border:0; color:#0b1020; font-family:Poppins,sans-serif; font-size:13px; font-weight:700; padding:11px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="check" style="width:15px;height:15px;flex:0 0 auto"></i>Cumple requisitos, pasa a comité</button>
+                    <button style="background:#fff; border:1px solid #CBD5E1; color:#1E293B; font-size:13px; padding:11px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="x" style="width:15px;height:15px;flex:0 0 auto"></i>No cumple requisitos</button>
+                    <button onClick="{{ goDep3 }}" style="background:#fff; border:1px solid #0047CC; color:#0047CC; font-size:13px; font-weight:600; padding:11px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:8px"><i data-lucide="gavel" style="width:15px;height:15px;flex:0 0 auto"></i>Registrar decisión del comité</button>
+                  </div>
+                </div>
+              </sc-if>
+
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NOTAS DEL DOCUMENTO ===== -->
+    <sc-if value="{{ notesOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="width:352px; flex:0 0 auto; background:#F8FAFC; border-left:1px solid rgba(30,41,59,.12); overflow:auto; padding:24px 26px 44px">
+        <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:#B07C00; font-weight:700; margin-bottom:14px">Maquetación · {{ noteRef }}</div>
+        <div style="font-family:Poppins,sans-serif; font-size:19px; font-weight:700; color:#243b8e; margin-bottom:22px; line-height:1.3; letter-spacing:-.01em">{{ screenTitle }}</div>
+
+        <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:#64748B; font-weight:700; margin-bottom:8px">Objetivo</div>
+        <p style="margin:0 0 24px; font-size:13px; line-height:1.65; color:#1E293B; text-wrap:pretty">{{ screenObjetivo }}</p>
+
+        <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:#64748B; font-weight:700; margin-bottom:10px">Elementos principales</div>
+        <div style="display:flex; flex-direction:column; gap:9px; margin-bottom:24px">
+          <sc-for list="{{ noteElementos }}" as="e" hint-placeholder-count="4">
+            <div style="display:grid; grid-template-columns:6px 1fr; gap:11px; align-items:start">
+              <span style="width:6px; height:6px; background:#F4B400; margin-top:7px"></span>
+              <span style="font-size:12px; line-height:1.6; color:#1E293B">{{ e }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:#64748B; font-weight:700; margin-bottom:10px">Acciones / navegación</div>
+        <div style="display:flex; flex-direction:column; gap:9px; margin-bottom:24px">
+          <sc-for list="{{ noteAcciones }}" as="a" hint-placeholder-count="3">
+            <div style="display:grid; grid-template-columns:6px 1fr; gap:11px; align-items:start">
+              <span style="width:6px; height:6px; background:#0047CC; margin-top:7px"></span>
+              <span style="font-size:12px; line-height:1.6; color:#1E293B">{{ a }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ noteObs }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F1F5F9; border-left:2px solid #F4B400; padding:13px 15px; font-size:12px; line-height:1.65; color:#64748B; text-wrap:pretty">{{ noteObs }}</div>
+        </sc-if>
+
+        <div style="margin-top:28px; padding-top:20px; border-top:1px solid rgba(30,41,59,.12)">
+          <div style="font-family:Poppins,sans-serif; font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:#64748B; font-weight:700; margin-bottom:11px">Badges de estado</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px">
+            <sc-for list="{{ badgeLegend }}" as="b" hint-placeholder-count="6">
+              <span style="{{ b.style }}">{{ b.label }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const BADGE = {
+  Radicado: ['rgba(0,71,204,.10)', '#0047CC'],
+  'En trámite': ['rgba(244,180,0,.22)', '#7A5A00'],
+  'En comité': ['rgba(0,71,204,.10)', '#0047CC'],
+  Respondido: ['#E7F3EA', '#15803D'],
+  Vencido: ['#FBE7E7', '#B91C1C'],
+  Anulado: ['#F1F5F9', '#64748B'],
+  Pendiente: ['rgba(0,71,204,.10)', '#0047CC'],
+  'En revisión': ['rgba(244,180,0,.22)', '#7A5A00'],
+  Activo: ['#E7F3EA', '#15803D'],
+  Deshabilitado: ['#F1F5F9', '#64748B'],
+  'Por clasificar': ['rgba(244,180,0,.22)', '#7A5A00'],
+  Clasificado: ['#E7F3EA', '#15803D']
+};
+const badgeStyle = (s) => {
+  const c = BADGE[s] || BADGE.Anulado;
+  return `background:${c[0]};color:${c[1]};font-size:11px;font-weight:700;padding:4px 10px;white-space:nowrap;display:inline-block`;
+};
+const TD = 'padding:12px 18px; color:#1E293B; white-space:nowrap';
+const TDW = 'padding:12px 18px; color:#1E293B';
+const MONO = "padding:12px 18px; font-family:Poppins,sans-serif; font-weight:700; color:#1E293B; white-space:nowrap";
+const BTN_P = 'background:#F4B400; border:0; color:#0b1020; font-family:Poppins,sans-serif; font-size:13px; font-weight:700; padding:11px 16px; cursor:pointer';
+const BTN_S = 'background:#fff; border:1px solid #CBD5E1; color:#1E293B; font-size:13px; padding:11px 16px; cursor:pointer';
+
+const ROLES = [
+  ['login', 'Inicio de sesión'], ['est', 'Estudiantes'], ['rec', 'Recepción'], ['dep', 'Dependencias'], ['adm', 'Administrador']
+];
+
+const ICONS = {
+  'rec-1': 'inbox', 'rec-2': 'file-plus', 'rec-3': 'package', 'rec-4': 'file-text', 'rec-5': 'bell-ring', 'rec-6': 'search',
+  'dep-1': 'inbox', 'dep-2': 'file-text', 'dep-3': 'send', 'dep-4': 'users', 'dep-5': 'bell-ring',
+  'arc-4': 'scan-line', 'arc-1': 'folder-input', 'arc-2': 'folder-tree', 'arc-3': 'folder-search',
+  'adm-1': 'user-cog', 'adm-2': 'sliders-horizontal', 'adm-3': 'scroll-text',
+  'login': 'lock', 'est-1': 'home', 'est-2': 'file-pen-line', 'est-3': 'check-circle'
+};
+
+const MENUS = {
+  rec: [['rec-1', 'Bandeja de radicados'], ['rec-2', 'Nueva radicación'], ['rec-3', 'Registro sin consecutivo'], ['rec-5', 'Alertas de vencimiento'], ['rec-6', 'Buscar por cédula'],
+    ['__h', 'Archivo Central'], ['arc-4', 'Digitalizar documentos físicos'], ['arc-1', 'Documentos por clasificar'], ['arc-2', 'Clasificación de expediente'], ['arc-3', 'Consulta de expedientes']],
+  dep: [['dep-1', 'Radicados asignados'], ['dep-2', 'Detalle y respuesta'], ['dep-4', 'Flujo de comité'], ['dep-5', 'Alertas de vencimiento']],
+  arc: [['arc-1', 'Documentos por clasificar'], ['arc-2', 'Clasificación de expediente'], ['arc-3', 'Consulta de expedientes']],
+  adm: [['adm-1', 'Gestión de usuarios'], ['adm-2', 'Tipos de trámite y plazos'], ['adm-3', 'Panel de auditoría']]
+};
+
+const USERS = {
+  rec: ['Marcela Ordóñez', 'Recepción y Archivo Central'],
+  dep: ['Carlos A. Zúñiga', 'Facultad de Ingeniería'],
+  arc: ['Diana Paz', 'Archivo Central'],
+  adm: ['Soporte TIC', 'Administrador']
+};
+
+const SCREENS = {
+  'login': {
+    ref: '2 · Panel interno', title: 'Inicio de sesión',
+    objetivo: 'Dar acceso al personal de la universidad con el rol que le corresponde.',
+    elementos: ['Logo de la universidad', 'Usuario institucional y contraseña', 'Recuperación de contraseña'],
+    acciones: ['Entrar → carga el panel interno con los módulos permitidos por el rol'],
+    obs: 'La pantalla de acceso no se detalla en la maquetación; se propone aquí para completar el flujo del panel interno.'
+  },
+  'est-1': {
+    ref: '3 · Estudiantes, pantalla 1', title: 'Portal de radicación · Ingreso',
+    objetivo: 'Identificar al estudiante antes de radicar, sin fricción.',
+    elementos: ['Campo de correo institucional o cédula', 'Verificación (código al correo, o validación contra el sistema académico si TI lo autoriza)'],
+    acciones: ['Continuar → pasa al formulario de nueva solicitud'],
+    obs: 'Pendiente confirmar con TI el mecanismo exacto de identificación (sección 8 del documento).'
+  },
+  'est-2': {
+    ref: '3 · Estudiantes, pantalla 2', title: 'Nueva solicitud',
+    objetivo: 'Capturar el trámite que el estudiante quiere radicar.',
+    elementos: ['Tipo de trámite (reingreso, reintegro de dinero, homologación, trabajo de grado, tutela, otro)', 'Datos del solicitante (autocompletados si hay validación previa)', 'Programa o carrera', 'Descripción de la solicitud', 'Adjuntar documento(s) (PDF/imagen — hasta 100MB para paquetes grandes como homologaciones)', 'Correo de contacto para la respuesta'],
+    acciones: ['Enviar → genera el radicado y pasa a la pantalla de confirmación', 'Cancelar → vuelve al ingreso']
+  },
+  'est-3': {
+    ref: '3 · Estudiantes, pantalla 3', title: 'Confirmación de radicado',
+    objetivo: 'Dejar constancia clara de que la solicitud quedó registrada.',
+    elementos: ['Número de consecutivo asignado', 'Fecha y hora de radicación', '“Tu respuesta llegará a tu correo institucional”', 'Botón para descargar el comprobante en PDF'],
+    acciones: ['Descargar comprobante', 'Radicar otra solicitud → vuelve a la pantalla 2']
+  },
+  'est-4': {
+    ref: '3 · Pantalla opcional', title: 'Mis trámites',
+    objetivo: 'Que el estudiante consulte el estado de sus propias solicitudes sin escribir a Recepción.',
+    elementos: ['Campo de búsqueda por número de cédula', 'Listado de solicitudes de esa cédula con número, tipo, dependencia y estado', 'Sin bandeja de mensajería ni chat'],
+    acciones: ['Buscar → muestra las solicitudes radicadas con esa cédula', 'Solo lectura — la respuesta sigue llegando por correo', 'Radicar una nueva solicitud'],
+    obs: 'No fue mencionada en las entrevistas. Queda como propuesta a confirmar (sección 8 del documento).'
+  },
+  'rec-1': {
+    ref: '4 · Recepción, pantalla 1', title: 'Bandeja de radicados',
+    objetivo: 'Vista de trabajo diaria de Recepción: todo lo que ha entrado y su estado.',
+    elementos: ['Tabla: consecutivo, tipo, remitente, dependencia asignada, estado, fecha', 'Filtros: fecha, tipo de trámite, dependencia, estado', 'Buscador por cédula o nombre'],
+    acciones: ['Clic en una fila → abre la ficha de radicado (pantalla 4)', 'Botón “Nueva radicación” → pantalla 2', 'Botón “Registrar sin consecutivo” → pantalla 3'],
+    kind: 'table',
+    columns: ['Consecutivo', 'Tipo', 'Remitente', 'Dependencia', 'Estado', 'Fecha'],
+    filters: ['Fecha', 'Tipo de trámite', 'Dependencia', 'Estado'],
+    search: 'Buscar por cédula o nombre',
+    pag: '1–6 de 148 radicados',
+    rows: [
+      ['2026-CR-01487', 'Homologación', 'Laura C. Chicangana', 'Facultad de Ingeniería', 'En trámite', '1 sep 2026'],
+      ['2026-CR-01486', 'Reingreso', 'Juan S. Muñoz', 'Registro Académico', 'Radicado', '1 sep 2026'],
+      ['2026-CR-01483', 'Trabajo de grado', 'Andrés F. Muñoz', 'Facultad de Ingeniería', 'En comité', '29 ago 2026'],
+      ['2026-CR-01479', 'Reintegro de dinero', 'Paola Bolaños', 'Financiera', 'Vencido', '25 ago 2026'],
+      ['2026-CR-01474', 'Tutela', 'Juzgado 3° Popayán', 'Rectoría', 'Respondido', '22 ago 2026'],
+      ['2026-CR-01470', 'Otro', 'Ana M. Cerón', 'Bienestar', 'Anulado', '20 ago 2026']
+    ],
+    go: 'rec-4'
+  },
+  'rec-2': {
+    ref: '4 · Recepción, pantalla 2', title: 'Nueva radicación manual',
+    objetivo: 'Radicar correspondencia física o digital que llega directo a ventanilla.',
+    elementos: ['Tipo de consecutivo (comunicación recibida/enviada, circular, resolución, convenio)', 'Datos del remitente', 'Dependencia destinataria', 'Adjuntar documento', 'Fecha y hora (autogenerada, editable si es radicación tardía de algo físico)'],
+    acciones: ['Radicar → asigna consecutivo automático y muestra confirmación', 'El sistema calcula el plazo de respuesta según el tipo de trámite'],
+    kind: 'form',
+    note: 'Al radicar, el sistema asigna el consecutivo automático y calcula el plazo de respuesta según el tipo de trámite.',
+    fields: [
+      ['Tipo de consecutivo', 'select', 'Comunicación recibida'],
+      ['Tipo de trámite', 'select', 'Homologación'],
+      ['Nombre del remitente', 'text', 'Nombre completo'],
+      ['Cédula / NIT', 'text', 'Número de documento'],
+      ['Dependencia destinataria', 'select', 'Facultad de Ingeniería'],
+      ['Fecha y hora de radicación', 'text', '1 sep 2026 · 10:24 a. m.', 'Autogenerada; editable si es radicación tardía de un documento físico'],
+      ['Documento', 'file', '', '', 'full'],
+      ['Asunto', 'area', 'Resumen de la comunicación', '', 'full']
+    ],
+    actions: [['Radicar', 'rec-4', 'p'], ['Cancelar', 'rec-1', 's']]
+  },
+  'rec-3': {
+    ref: '4 · Recepción, pantalla 3', title: 'Registro sin consecutivo',
+    objetivo: 'Dejar constancia de entrega de elementos que no se radican (revistas, facturas, paquetes, documentos sin firma).',
+    elementos: ['Fecha y hora', 'Tipo de elemento', 'Remitente (si se conoce)', 'Dependencia destinataria'],
+    acciones: ['Guardar constancia → no genera consecutivo', '“En realidad esto sí debe radicarse” → redirige a la pantalla 2'],
+    kind: 'form',
+    note: 'Esta constancia no genera consecutivo ni plazo de respuesta.',
+    fields: [
+      ['Fecha y hora', 'text', '1 sep 2026 · 11:05 a. m.'],
+      ['Tipo de elemento', 'select', 'Revista'],
+      ['Remitente (si se conoce)', 'text', 'Opcional'],
+      ['Dependencia destinataria', 'select', 'Biblioteca'],
+      ['Observaciones', 'area', 'Detalle de lo entregado', '', 'full']
+    ],
+    actions: [['Guardar constancia', 'rec-1', 'p'], ['En realidad esto sí debe radicarse', 'rec-2', 's']]
+  },
+  'rec-4': {
+    ref: '4 · Recepción, pantalla 4', title: 'Ficha de radicado / trazabilidad',
+    objetivo: 'Ver el detalle completo y el historial de un radicado.',
+    elementos: ['Datos del radicado y documento adjunto', 'Línea de tiempo de estados (radicado → asignado → en trámite/comité → respondido)', 'Plazo de respuesta y días restantes'],
+    acciones: ['Reasignar a otra dependencia', 'Descargar documento', 'Volver a la bandeja'],
+    kind: 'ficha', back: 'rec-1',
+    fichaActions: [['Reasignar a otra dependencia', '', 'p'], ['Volver a la bandeja', 'rec-1', 's']]
+  },
+  'rec-5': {
+    ref: '4 · Recepción, pantalla 5', title: 'Alertas de vencimiento',
+    objetivo: 'Ver de un vistazo qué radicados están por vencer o ya vencieron.',
+    elementos: ['Lista agrupada por urgencia (vence hoy, vence esta semana, vencido)', 'Indicador si el retraso corresponde a espera de comité (no a la dependencia)'],
+    acciones: ['Clic en un radicado → abre su ficha'],
+    kind: 'alertas', go: 'rec-4'
+  },
+  'rec-6': {
+    ref: '4 · Recepción, pantalla 6', title: 'Buscar por cédula',
+    objetivo: 'Consultar el historial documental completo de una persona.',
+    elementos: ['Campo de búsqueda por cédula o nombre', 'Resultado: lista de todos los radicados asociados a esa persona'],
+    acciones: ['Clic en un resultado → abre su ficha'],
+    kind: 'table',
+    columns: ['Consecutivo', 'Tipo', 'Dependencia', 'Estado', 'Fecha'],
+    filters: [], search: 'Cédula o nombre — p. ej. 1.061.784.220',
+    pag: '3 radicados de Laura Camila Chicangana · 1.061.784.220',
+    rows: [
+      ['2026-CR-01487', 'Homologación', 'Facultad de Ingeniería', 'En trámite', '1 sep 2026'],
+      ['2025-CR-00932', 'Reingreso', 'Registro Académico', 'Respondido', '14 feb 2025'],
+      ['2024-CR-00610', 'Reintegro de dinero', 'Financiera', 'Respondido', '3 oct 2024']
+    ],
+    go: 'rec-4'
+  },
+  'dep-1': {
+    ref: '5 · Dependencias, pantalla 1', title: 'Radicados asignados',
+    objetivo: 'Bandeja de trabajo de la dependencia.',
+    elementos: ['Tabla: consecutivo, tipo de trámite, solicitante, estado, días restantes', 'Filtros por estado (pendiente, en revisión, en comité, respondido)'],
+    acciones: ['Clic en una fila → abre el detalle (pantalla 2)'],
+    obs: 'Cada dependencia ve únicamente sus propios radicados asignados; el contenido de la pantalla es el mismo para todas.',
+    kind: 'table',
+    columns: ['Consecutivo', 'Tipo de trámite', 'Solicitante', 'Estado', 'Días restantes'],
+    filters: ['Estado'], search: 'Buscar por cédula o nombre',
+    pag: '1–5 de 23 radicados asignados',
+    rows: [
+      ['2026-CR-01487', 'Homologación', 'Laura C. Chicangana', 'En trámite', '6 días'],
+      ['2026-CR-01481', 'Homologación', 'Sebastián Rojas', 'Pendiente', '11 días'],
+      ['2026-CR-01455', 'Trabajo de grado', 'Andrés F. Muñoz', 'En comité', 'En espera'],
+      ['2026-CR-01442', 'Reingreso', 'Valeria Astudillo', 'Vencido', '−3 días'],
+      ['2026-CR-01430', 'Homologación', 'Miguel Ángel Ruiz', 'Respondido', '—']
+    ],
+    go: 'dep-2'
+  },
+  'dep-2': {
+    ref: '5 · Dependencias, pantalla 2', title: 'Detalle de radicado',
+    objetivo: 'Revisar la solicitud antes de responder o de pasarla a comité.',
+    elementos: ['Datos del radicado y documento(s) adjuntos', 'Plazo de respuesta y alerta si está próximo a vencer', 'Historial de trazabilidad'],
+    acciones: ['Responder → pantalla 3', 'Si el trámite requiere comité: “Marcar en revisión de requisitos” → pantalla 4'],
+    kind: 'ficha', back: 'dep-1',
+    fichaActions: [['Responder', 'dep-3', 'p'], ['Marcar en revisión de requisitos', 'dep-4', 's']]
+  },
+  'dep-3': {
+    ref: '5 · Dependencias, pantalla 3', title: 'Formulario de respuesta',
+    objetivo: 'Generar la respuesta y cerrar (o continuar) el trámite.',
+    elementos: ['Adjuntar documento de respuesta', 'Campo de observaciones'],
+    acciones: ['Enviar respuesta → cambia el estado a “Respondido” y envía copia automática a Recepción, Registro Académico y al solicitante'],
+    kind: 'form', back: 'dep-2',
+    note: 'Al enviar, el estado pasa a “Respondido” y se envía copia automática a Recepción, Registro Académico y al solicitante.',
+    fields: [
+      ['Radicado', 'text', '2026-CR-01487 · Homologación'],
+      ['Sentido de la respuesta', 'select', 'Aprobado'],
+      ['Documento de respuesta', 'file', '', '', 'full'],
+      ['Observaciones', 'area', 'Notas internas o aclaraciones para el solicitante', '', 'full']
+    ],
+    actions: [['Enviar respuesta', 'dep-1', 'p'], ['Cancelar', 'dep-2', 's']]
+  },
+  'dep-4': {
+    ref: '5 · Dependencias, pantalla 4', title: 'Flujo de comité',
+    objetivo: 'Reflejar que ciertos trámites (ej. trabajo de grado) dependen de una reunión mensual del comité.',
+    elementos: ['Estado actual (en revisión de requisitos / en comité / decidido)', 'Fecha estimada de la próxima reunión (si se conoce)'],
+    acciones: ['“Cumple requisitos” → pasa a “en comité”', '“No cumple requisitos” → “rechazado por requisitos incompletos” (sin pasar por comité)', 'Registrar decisión del comité → genera la respuesta (pantalla 3)'],
+    kind: 'comite', back: 'dep-1'
+  },
+  'dep-5': {
+    ref: '5 · Dependencias', title: 'Alertas de vencimiento',
+    objetivo: 'Ver los radicados propios de la dependencia próximos a vencer o vencidos.',
+    elementos: ['Lista agrupada por urgencia', 'Indicador si el retraso corresponde a espera de comité (no a la dependencia)'],
+    acciones: ['Clic en un radicado → abre su detalle'],
+    kind: 'alertas', go: 'dep-2'
+  },
+  'arc-1': {
+    ref: '6 · Archivo Central, pantalla 1', title: 'Documentos por clasificar',
+    objetivo: 'Ver qué documentos respondidos/cerrados faltan por archivar formalmente.',
+    elementos: ['Tabla de documentos pendientes de clasificación'],
+    acciones: ['Clic en un documento → pantalla 2'],
+    kind: 'table',
+    columns: ['Consecutivo', 'Tipo', 'Dependencia', 'Cerrado el', 'Estado'],
+    filters: ['Dependencia'], search: 'Buscar por cédula o nombre',
+    pag: '1–5 de 62 documentos pendientes',
+    rows: [
+      ['2026-CR-01474', 'Tutela', 'Rectoría', '28 ago 2026', 'Por clasificar'],
+      ['2026-CR-01430', 'Homologación', 'Facultad de Ingeniería', '26 ago 2026', 'Por clasificar'],
+      ['2026-CR-01412', 'Reingreso', 'Registro Académico', '21 ago 2026', 'Por clasificar'],
+      ['2026-CR-01398', 'Reintegro de dinero', 'Financiera', '19 ago 2026', 'Por clasificar'],
+      ['2026-CR-01377', 'Convenio', 'Rectoría', '15 ago 2026', 'Clasificado']
+    ],
+    go: 'arc-2'
+  },
+  'arc-4': {
+    ref: '6 · Archivo Central · propuesta', title: 'Digitalizar documentos físicos',
+    objetivo: 'Subir a la nube los documentos que hoy solo existen en papel y vincularlos a su expediente.',
+    elementos: ['Carga masiva de archivos escaneados (PDF o imagen)', 'Serie / subserie documental (TRD) y expediente de destino', 'Ubicación física del original (caja, carpeta, estante)', 'Fecha del documento original'],
+    acciones: ['Subir y clasificar → el documento queda disponible en la consulta de expedientes', 'El original físico conserva su ubicación registrada'],
+    obs: 'No aparece en la maquetación original; se agrega porque la mayoría del archivo está en físico y se quiere tener en la nube.',
+    kind: 'form', back: 'arc-3',
+    note: 'Los archivos escaneados quedan vinculados al expediente y se registra dónde está guardado el original en papel.',
+    fields: [
+      ['Documentos escaneados', 'file', '', 'PDF o imagen · puedes subir varios archivos a la vez', 'full'],
+      ['Serie documental (TRD)', 'select', 'Historias académicas'],
+      ['Subserie documental', 'select', 'Homologaciones'],
+      ['Expediente de destino', 'select', 'Buscar expediente existente…', 'O crear uno nuevo si no existe'],
+      ['Fecha del documento original', 'text', 'dd/mm/aaaa'],
+      ['Ubicación física del original', 'text', 'Caja 14 · Carpeta 3 · Estante B', 'Para poder encontrar el papel si se necesita', 'full'],
+      ['Observaciones', 'area', 'Estado del documento, páginas faltantes, etc.', '', 'full']
+    ],
+    actions: [['Subir y clasificar', 'arc-3', 'p'], ['Cancelar', 'arc-3', 's']]
+  },
+  'arc-2': {
+    ref: '6 · Archivo Central, pantalla 2', title: 'Clasificación de expediente',
+    objetivo: 'Aplicar la Tabla de Retención Documental (TRD) a un documento.',
+    elementos: ['Serie / subserie documental (según TRD)', 'Expediente al que pertenece (buscar existente o crear uno nuevo)'],
+    acciones: ['Guardar clasificación → el documento queda vinculado al expediente'],
+    kind: 'form', back: 'arc-1',
+    note: 'Las series y subseries provienen de la Tabla de Retención Documental vigente.',
+    fields: [
+      ['Documento', 'text', '2026-CR-01474 · Tutela · Rectoría'],
+      ['Serie documental (TRD)', 'select', 'Acciones constitucionales'],
+      ['Subserie documental', 'select', 'Acciones de tutela'],
+      ['Expediente', 'select', 'Buscar expediente existente…', 'O crear uno nuevo si no existe'],
+      ['Observaciones de archivo', 'area', 'Opcional', '', 'full']
+    ],
+    actions: [['Guardar clasificación', 'arc-1', 'p'], ['Cancelar', 'arc-1', 's']]
+  },
+  'arc-3': {
+    ref: '6 · Archivo Central, pantalla 3', title: 'Consulta de expedientes',
+    objetivo: 'Buscar y revisar expedientes ya clasificados.',
+    elementos: ['Buscador por persona, dependencia o serie documental', 'Vista de expediente con todos sus documentos'],
+    acciones: ['Clic en un documento → ver/descargar'],
+    kind: 'table',
+    columns: ['Expediente', 'Serie / subserie', 'Titular o dependencia', 'Documentos', 'Última actualización'],
+    filters: ['Serie documental', 'Dependencia'], search: 'Buscar por persona, dependencia o serie',
+    pag: '1–4 de 1.204 expedientes',
+    rows: [
+      ['EXP-2026-0114', 'Acciones constitucionales / Tutelas', 'Rectoría', '7', '28 ago 2026'],
+      ['EXP-2026-0098', 'Historias académicas / Homologaciones', 'Laura C. Chicangana', '4', '26 ago 2026'],
+      ['EXP-2025-0771', 'Convenios / Interinstitucionales', 'Rectoría', '12', '15 ago 2026'],
+      ['EXP-2025-0640', 'Financieros / Reintegros', 'Financiera', '3', '19 ago 2026']
+    ]
+  },
+  'adm-1': {
+    ref: '7 · Administrador, pantalla 1', title: 'Gestión de usuarios',
+    objetivo: 'Administrar quién tiene acceso al sistema y con qué rol.',
+    elementos: ['Tabla de usuarios: nombre, dependencia, rol, estado (activo/deshabilitado)', 'Buscador'],
+    acciones: ['Crear usuario', 'Editar rol/dependencia', 'Deshabilitar (sin eliminar, para conservar trazabilidad)'],
+    kind: 'table',
+    columns: ['Nombre', 'Dependencia', 'Rol', 'Estado'],
+    filters: ['Rol', 'Estado'], search: 'Buscar usuario',
+    pag: '1–5 de 34 usuarios',
+    rows: [
+      ['Marcela Ordóñez', 'Recepción', 'Recepción / Ventanilla', 'Activo'],
+      ['Carlos A. Zúñiga', 'Facultad de Ingeniería', 'Dependencia', 'Activo'],
+      ['Diana Paz', 'Archivo Central', 'Archivo Central', 'Activo'],
+      ['Hernán Velasco', 'Financiera', 'Dependencia', 'Deshabilitado'],
+      ['Soporte TIC', 'TIC', 'Administrador', 'Activo']
+    ]
+  },
+  'adm-2': {
+    ref: '7 · Administrador, pantalla 2', title: 'Tipos de trámite y plazos',
+    objetivo: 'Configurar, sin tocar código, cuánto se demora y si requiere comité cada tipo de solicitud.',
+    elementos: ['Tabla editable: tipo de trámite, plazo en días hábiles, requiere comité (sí/no)'],
+    acciones: ['Editar plazo o requisito de comité de un tipo existente', 'Agregar un nuevo tipo de trámite'],
+    kind: 'table',
+    columns: ['Tipo de trámite', 'Plazo (días hábiles)', 'Requiere comité', 'Acción'],
+    filters: [], search: 'Buscar tipo de trámite',
+    pag: '6 tipos de trámite configurados',
+    rows: [
+      ['Reingreso', '15', 'No', 'Editar'],
+      ['Reintegro de dinero', '30', 'No', 'Editar'],
+      ['Homologación', '15', 'No', 'Editar'],
+      ['Trabajo de grado', '30', 'Sí', 'Editar'],
+      ['Tutela', '2', 'No', 'Editar'],
+      ['Otro', '15', 'No', 'Editar']
+    ]
+  },
+  'adm-3': {
+    ref: '7 · Administrador, pantalla 3', title: 'Panel de auditoría',
+    objetivo: 'Ver la actividad reciente del sistema para control interno.',
+    elementos: ['Lista de cambios recientes: quién, qué, cuándo (creación de usuarios, ediciones de datos de personas, anulaciones)'],
+    acciones: ['Filtrar por usuario o tipo de acción'],
+    kind: 'table',
+    columns: ['Fecha y hora', 'Usuario', 'Acción', 'Detalle'],
+    filters: ['Usuario', 'Tipo de acción'], search: 'Buscar en la auditoría',
+    pag: '1–5 de 2.860 registros',
+    rows: [
+      ['1 sep 2026 · 10:24', 'Marcela Ordóñez', 'Radicación', 'Creó 2026-CR-01487'],
+      ['1 sep 2026 · 09:12', 'Soporte TIC', 'Usuario', 'Deshabilitó a Hernán Velasco'],
+      ['31 ago 2026 · 16:40', 'Carlos A. Zúñiga', 'Respuesta', 'Respondió 2026-CR-01430'],
+      ['31 ago 2026 · 14:05', 'Marcela Ordóñez', 'Anulación', 'Anuló 2026-CR-01470'],
+      ['30 ago 2026 · 11:31', 'Soporte TIC', 'Configuración', 'Cambió plazo de “Tutela” a 2 días']
+    ]
+  }
+};
+
+const ALERTS = [
+  ['Vence hoy', '#F4B400', [['2026-CR-01442', 'Reingreso', 'Registro Académico', 'Vence hoy', false]]],
+  ['Vence esta semana', '#0047CC', [
+    ['2026-CR-01487', 'Homologación', 'Facultad de Ingeniería', 'Quedan 3 días', false],
+    ['2026-CR-01455', 'Trabajo de grado', 'Facultad de Ingeniería', 'Quedan 4 días', true]
+  ]],
+  ['Vencido', '#B91C1C', [['2026-CR-01479', 'Reintegro de dinero', 'Financiera', '7 días de retraso', false]]]
+];
+
+const TITULARES = [
+  {
+    cedula: '1.061.784.220', nombre: 'Laura Camila Chicangana',
+    tramites: [
+      { num: '2026-CR-01487', tipo: 'Homologación', dep: 'Facultad de Ingeniería', fecha: '1 sep 2026', estado: 'En trámite', icon: 'clock', plazo: 'Quedan 6 días hábiles' },
+      { num: '2026-CR-01455', tipo: 'Trabajo de grado', dep: 'Facultad de Ingeniería', fecha: '20 ago 2026', estado: 'En comité', icon: 'users', plazo: 'Comité del 18 de septiembre' },
+      { num: '2025-CR-00932', tipo: 'Reingreso', dep: 'Registro Académico', fecha: '14 feb 2025', estado: 'Respondido', icon: 'check-circle', plazo: 'Respuesta enviada al correo' },
+      { num: '2024-CR-00610', tipo: 'Reintegro de dinero', dep: 'Financiera', fecha: '3 oct 2024', estado: 'Respondido', icon: 'check-circle', plazo: 'Respuesta enviada al correo' }
+    ]
+  },
+  {
+    cedula: '1.007.452.118', nombre: 'Andrés Felipe Muñoz',
+    tramites: [
+      { num: '2026-CR-01483', tipo: 'Trabajo de grado', dep: 'Facultad de Ingeniería', fecha: '29 ago 2026', estado: 'En comité', icon: 'users', plazo: 'Comité del 18 de septiembre' },
+      { num: '2025-CR-01120', tipo: 'Reingreso', dep: 'Registro Académico', fecha: '11 mar 2025', estado: 'Respondido', icon: 'check-circle', plazo: 'Respuesta enviada al correo' }
+    ]
+  }
+];
+const soloDigitos = (v) => String(v || '').replace(/\D/g, '');
+
+const TIMELINE = [
+  ['Radicado', 'Portal público · Laura C. Chicangana', '1 sep 2026 · 10:24 a. m.'],
+  ['Asignado a dependencia', 'Marcela Ordóñez · Recepción', '1 sep 2026 · 10:31 a. m.'],
+  ['En trámite', 'Carlos A. Zúñiga · Facultad de Ingeniería', '2 sep 2026 · 08:15 a. m.'],
+  ['Respondido', 'Pendiente', '—']
+];
+
+class Component extends DCLogic {
+  state = { role: 'login', screen: 'login', notes: true, alerts: false };
+
+  drawIcons() {
+    if (window.lucide) window.lucide.createIcons();
+    else setTimeout(() => window.lucide && window.lucide.createIcons(), 300);
+  }
+  componentDidMount() { this.drawIcons(); }
+  componentDidUpdate() { this.drawIcons(); }
+
+  goRole(role) {
+    const first = role === 'est' ? 'est-1' : (role === 'login' ? 'login' : MENUS[role][0][0]);
+    this.setState({ role, screen: first });
+  }
+
+  renderVals() {
+    const { role, screen, notes, alerts, cedula = '', buscado = false } = this.state;
+    const digits = soloDigitos(cedula);
+    const titular = digits.length >= 6 ? TITULARES.find((t) => soloDigitos(t.cedula) === digits) : null;
+    const hits = buscado && titular ? titular.tramites : [];
+    const sc = SCREENS[screen] || SCREENS['est-1'];
+    const isPortal = role === 'est';
+    const isLogin = role === 'login';
+    const kind = sc.kind || '';
+
+    const roles = ROLES.map(([id, label]) => ({
+      label,
+      go: () => this.goRole(id),
+      tabStyle: `border:0; font-family:Poppins,sans-serif; font-size:12px; font-weight:${id === role ? 700 : 500}; padding:8px 14px; cursor:pointer; background:${id === role ? '#F4B400' : 'transparent'}; color:${id === role ? '#0b1020' : '#64748B'}`
+    }));
+
+    const menu = (MENUS[role] || []).map(([id, label]) => ({
+      label, icon: ICONS[id] || 'circle', isHeader: id === '__h', isItem: id !== '__h',
+      go: () => this.setState({ screen: id }),
+      style: `display:flex; align-items:center; gap:10px; text-align:left; border:0; border-left:2px solid ${id === screen ? '#F4B400' : 'transparent'}; font-family:Inter,sans-serif; font-size:13px; font-weight:${id === screen ? 600 : 400}; padding:10px 12px; cursor:pointer; background:${id === screen ? '#F1F5F9' : 'transparent'}; color:${id === screen ? '#1E293B' : '#64748B'}`
+    }));
+
+    const rows = (sc.rows || []).map((cells) => ({
+      go: sc.go ? () => this.setState({ screen: sc.go }) : () => {},
+      cells: cells.map((text, i) => {
+        const isBadge = !!BADGE[text] && i >= 3;
+        return {
+          text, isBadge, isPlain: !isBadge,
+          badge: isBadge ? badgeStyle(text) : '',
+          style: i === 0 ? MONO : (i === 2 || i === 3 ? TDW : TD)
+        };
+      })
+    }));
+
+    const mkActions = (list) => (list || []).map(([label, target, variant]) => ({
+      label,
+      go: target ? () => this.setState({ screen: target }) : () => {},
+      style: variant === 'p' ? BTN_P : BTN_S
+    }));
+
+    const formFields = (sc.fields || []).map(([label, type, value, hint, full]) => ({
+      label, value, hint: hint || '',
+      isSelect: type === 'select', isText: type === 'text', isArea: type === 'area', isFile: type === 'file',
+      wrap: full === 'full' ? 'grid-column:1 / -1' : ''
+    }));
+
+    const alertGroups = ALERTS.map(([label, color, items]) => ({
+      label, count: `${items.length} radicado${items.length > 1 ? 's' : ''}`,
+      dot: `width:9px;height:9px;background:${color};display:inline-block`,
+      items: items.map(([num, tipo, dep, plazo, comite]) => ({
+        num, tipo, dep, plazo, comite,
+        go: () => this.setState({ screen: sc.go || 'rec-4' }),
+        card: `display:flex; align-items:center; gap:14px; background:#fff; border:1px solid #E2E8F0; border-left:3px solid ${color}; padding:14px 18px; cursor:pointer`,
+        plazoStyle: `flex:0 0 auto; font-family:Poppins,sans-serif; font-size:12px; font-weight:700; color:${color === '#F4B400' ? '#7A5A00' : color}`
+      }))
+    }));
+
+    const timeline = TIMELINE.map(([estado, quien, cuando], i) => {
+      const done = i < 3;
+      return {
+        estado, quien, cuando,
+        dot: `width:11px;height:11px;flex:0 0 auto;background:${done ? '#F4B400' : 'transparent'};border:2px solid ${done ? '#F4B400' : 'rgba(30,41,59,.30)'};box-sizing:border-box`,
+        line: i === TIMELINE.length - 1 ? 'display:none' : 'width:1px;flex:1 1 auto;background:rgba(30,41,59,.18);margin:3px 0'
+      };
+    });
+
+    const comiteSteps = [['En revisión de requisitos', true], ['En comité', false], ['Decidido', false]]
+      .map(([label, active]) => ({
+        label,
+        style: `flex:1; text-align:center; font-family:Poppins,sans-serif; font-size:12px; font-weight:${active ? 700 : 500}; padding:12px 8px; background:${active ? '#F4B400' : '#F8FAFC'}; color:${active ? '#0b1020' : '#64748B'}; border:1px solid ${active ? '#F4B400' : '#1E293B'}`
+      }));
+
+    const portalNav = [['est-1', 'Inicio', 'home'], ['est-2', 'Nueva solicitud', 'file-pen-line'], ['est-3', 'Confirmación', 'check-circle'], ['est-4', 'Mis trámites', 'layers']]
+      .map(([id, label, icon]) => {
+        const active = id === screen;
+        return {
+          label, icon,
+          go: () => this.setState({ screen: id }),
+          style: `display:flex; align-items:center; gap:8px; border:0; border-radius:999px; background:${active ? 'rgba(255,255,255,.92)' : 'transparent'}; box-shadow:${active ? '0 2px 8px rgba(15,23,42,.10)' : 'none'}; color:${active ? '#243b8e' : '#334155'}; font-family:Poppins,sans-serif; font-size:13px; font-weight:600; padding:10px 18px; cursor:pointer; white-space:nowrap`
+        };
+      });
+
+    return {
+      roles, menu, isPortal, isLogin, isInterno: !isPortal && !isLogin,
+      alertsOpen: alerts,
+      toggleAlerts: () => this.setState({ alerts: !alerts }),
+      alertsBtnStyle: `display:flex; align-items:center; gap:8px; font-family:Inter,sans-serif; font-size:12px; color:#64748B; background:${alerts ? '#FFFBEB' : 'transparent'}; border:1px solid ${alerts ? '#F4B400' : 'transparent'}; padding:7px 10px; cursor:pointer`,
+      alertFlat: ALERTS.flatMap(([, color, items]) => items.map(([num, tipo, dep, plazo]) => ({
+        num, tipo, dep, plazo,
+        go: () => this.setState({ alerts: false, screen: role === 'dep' ? 'dep-2' : 'rec-4' }),
+        dot: `width:8px;height:8px;flex:0 0 auto;background:${color};display:inline-block`,
+        row: 'display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid #F1F5F9; cursor:pointer',
+        plazoStyle: `flex:0 0 auto; font-family:Poppins,sans-serif; font-size:11.5px; font-weight:700; color:${color === '#F4B400' ? '#B07C00' : color}`
+      }))),
+      goAlertas: () => this.setState({ alerts: false, screen: role === 'dep' ? 'dep-5' : 'rec-5' }),
+      goRec1: () => this.setState({ role: 'rec', screen: 'rec-1' }),
+      notesOpen: notes,
+      toggleNotes: () => this.setState({ notes: !notes }),
+      notesBtnStyle: `border:1px solid ${notes ? '#B07C00' : 'rgba(30,41,59,.18)'}; background:transparent; color:${notes ? '#B07C00' : '#64748B'}; font-family:Poppins,sans-serif; font-size:11px; font-weight:600; padding:8px 13px; cursor:pointer`,
+      moduleLabel: { rec: 'Recepción', dep: 'Dependencia · Ing.', arc: 'Archivo Central', adm: 'Administrador / TIC' }[role] || '',
+      userName: (USERS[role] || [''])[0],
+      userRole: (USERS[role] || ['', ''])[1],
+      isEst1: screen === 'est-1', isEst2: screen === 'est-2', isEst3: screen === 'est-3', isEst4: screen === 'est-4',
+      cedulaInput: cedula,
+      onCedula: (e) => this.setState({ cedula: e.target.value }),
+      buscarTramites: () => this.setState({ buscado: true }),
+      sinBusqueda: !buscado,
+      sinResultados: buscado && hits.length === 0,
+      conResultados: buscado && hits.length > 0,
+      titularNombre: titular ? titular.nombre : '',
+      titularCedula: titular ? titular.cedula : '',
+      resultadosTexto: `${hits.length} solicitud${hits.length === 1 ? '' : 'es'} encontrada${hits.length === 1 ? '' : 's'}`,
+      tramiteResumen: [
+        { icon: 'layers', label: 'Solicitudes radicadas', value: String(hits.length) },
+        { icon: 'clock', label: 'En curso', value: String(hits.filter((t) => t.estado !== 'Respondido').length) },
+        { icon: 'check-circle', label: 'Respondidas', value: String(hits.filter((t) => t.estado === 'Respondido').length) }
+      ],
+      misTramites: hits.map((t) => ({ ...t, badge: badgeStyle(t.estado) })),
+      goEst1: () => this.setState({ screen: 'est-1' }),
+      goEst2: () => this.setState({ screen: 'est-2' }),
+      goEst3: () => this.setState({ screen: 'est-3' }),
+      goRec2: () => this.setState({ screen: 'rec-2' }),
+      goRec3: () => this.setState({ screen: 'rec-3' }),
+      goDep3: () => this.setState({ screen: 'dep-3' }),
+      goBack: () => this.setState({ screen: sc.back || 'rec-1' }),
+      showBandejaActions: screen === 'rec-1',
+      showVolver: !!sc.back,
+      screenTitle: sc.title,
+      screenObjetivo: sc.objetivo,
+      isTableScreen: kind === 'table',
+      isFicha: kind === 'ficha',
+      isForm: kind === 'form',
+      isAlertas: kind === 'alertas',
+      isComite: kind === 'comite',
+      columns: sc.columns || [], rows, filters: sc.filters || [],
+      searchPlaceholder: sc.search || 'Buscar', paginationText: sc.pag || '',
+      formFields, formNote: sc.note || '', formActions: mkActions(sc.actions),
+      fichaActions: mkActions(sc.fichaActions),
+      alertGroups, timeline, comiteSteps, portalNav,
+      internoNav: (MENUS[role] || []).filter(([id]) => id !== '__h').slice(0, 4).map(([id, label]) => ({
+        label,
+        go: () => this.setState({ screen: id }),
+        style: `border:0; border-radius:999px; background:${id === screen ? 'rgba(255,255,255,.92)' : 'transparent'}; box-shadow:${id === screen ? '0 2px 8px rgba(15,23,42,.10)' : 'none'}; color:${id === screen ? '#243b8e' : '#334155'}; font-family:Poppins,sans-serif; font-size:12.5px; font-weight:600; padding:10px 16px; cursor:pointer; white-space:nowrap`
+      })),
+      goLogin: () => this.setState({ role: 'login', screen: 'login' }),
+      landingStats: [
+        { value: '6', label: 'tipos de trámite' },
+        { value: '100 MB', label: 'por envío' },
+        { value: '15 días', label: 'plazo habitual de respuesta' }
+      ],
+      landingSteps: [
+        { n: '1', slot: 'paso-1', alt: 'Estudiante con su carné', title: 'Identifícate', body: 'Con tu correo institucional o tu cédula. Verificamos que eres tú antes de radicar.' },
+        { n: '2', slot: 'paso-2', alt: 'Documentos y formulario', title: 'Llena la solicitud', body: 'Eliges el tipo de trámite, describes lo que pides y adjuntas los documentos de soporte.' },
+        { n: '3', slot: 'paso-3', alt: 'Comprobante de radicado', title: 'Recibe tu radicado', body: 'El sistema asigna el consecutivo y puedes descargar el comprobante en PDF.' }
+      ],
+      tramites: ['Reingreso', 'Reintegro de dinero', 'Homologación', 'Trabajo de grado', 'Tutela', 'Otro'],
+      noteRef: sc.ref, noteElementos: sc.elementos || [], noteAcciones: sc.acciones || [], noteObs: sc.obs || '',
+      badgeLegend: ['Radicado', 'En trámite', 'En comité', 'Respondido', 'Vencido', 'Anulado']
+        .map((label) => ({ label, style: badgeStyle(label) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

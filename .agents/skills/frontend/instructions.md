@@ -6,29 +6,57 @@
 - Tailwind CSS 4: tokens en `app/globals.css` con `@theme` (no hay `tailwind.config.js`).
 - Alias de imports `@/*` → raíz de `frontend_gestion_documental/`.
 - **Antes de usar cualquier API de Next, leer la guía en `node_modules/next/dist/docs/`.**
-  En Next 16, `middleware.ts` pasó a llamarse `proxy.ts`.
+  En Next 16, `middleware.ts` pasó a llamarse `proxy.ts`; `params` y `searchParams` son
+  promesas (`await params`) y existen los tipos globales `PageProps<"/ruta">` y `LayoutProps`.
 
-## Estructura de rutas propuesta
+## Librerías de interfaz (usar estas, no agregar equivalentes)
+
+| Para | Librería | Dónde se envuelve |
+|---|---|---|
+| Iconos | `lucide-react` (los mismos de la maquetación) | directo |
+| Botones y variantes | `class-variance-authority` + `clsx` + `tailwind-merge` | `components/ui/boton.tsx`, `lib/utils.ts` (`cn`) |
+| Alertas emergentes (toasts) | `sileo` — arriba al centro, relleno dorado `#f4b400`, texto `sobre-acento` | `components/ui/notificaciones.tsx` → usar siempre `notificar.*` |
+| Animaciones | `gsap` | `components/ui/aparecer.tsx` (entrada con `data-aparecer`), `contador.tsx`, `sello-exito.tsx` |
+| Diálogos y popovers accesibles | `@radix-ui/react-dialog`, `@radix-ui/react-popover` | `components/ui/dialogo.tsx`, panel de alertas |
+| Comprobante PDF | `jspdf` (import dinámico) | `components/publico/comprobante-pdf.tsx` |
+
+Toda animación respeta `prefers-reduced-motion`. Con GSAP: limpiar en el efecto
+(`ctx.revert()` / `tween.kill()`) y no usarlo para ocultar contenido que deba verse sin JS.
+
+`react-router-dom`, `@tailwindcss/vite`, `konva`/`react-konva` y `html2canvas` están en
+`package.json` pero no se usan: Next ya enruta y Tailwind 4 va por PostCSS. Decidir si se
+quitan.
+
+## Estructura de rutas (implementada)
 
 ```
 app/
-  (publico)/                 portal público, sin sesión (RF-017)
-    radicar/page.tsx
-    radicar/comprobante/page.tsx
-  (panel)/                   panel interno, con sesión y menú por rol
-    login/page.tsx           RF-013
-    radicados/…              bandeja, detalle, línea de tiempo (RF-001, 002, 004–006, 009, 011)
-    personas/…               búsqueda por cédula e historial (RF-007, RF-008)
-    correspondencia/…        registro sin consecutivo (RF-014)
-    expedientes/…            Archivo Central (RF-010)
-    usuarios/…               solo Administrador (RF-012)
-    configuracion/…          tipos de trámite, plazos, comité (RN-007)
-components/                  UI compartida
-lib/                         cliente de la API, tipos de contrato, utilidades
+  (publico)/                         portal público, sin sesión
+    page.tsx                         inicio
+    radicar/page.tsx                 nueva solicitud (RF-017)
+    radicar/confirmacion/page.tsx    comprobante + PDF
+    mis-tramites/page.tsx            consulta con número + cédula (RF-018)
+  login/page.tsx                     RF-013
+  panel/                             panel interno, menú según rol (lib/navegacion.ts)
+    radicados/ · radicados/nuevo · radicados/[id] · [id]/responder · [id]/comite
+    sin-consecutivo · verificacion · alertas · personas · asignados
+    archivo/(por-clasificar|clasificar|expedientes|digitalizar)
+    admin/(usuarios|tramites|auditoria)
+components/ui/                       piezas reutilizables (botón, campos, tabla, diálogo…)
+components/panel/ · components/publico/
+lib/                                 tipos, datos de demostración, navegación, utilidades
 ```
 
-Los grupos `(publico)` y `(panel)` tienen layouts distintos: el portal no importa nada del
-panel.
+El portal no importa nada de `components/panel/`.
+
+**Estado actual: maquetación funcional con datos de demostración** (`lib/datos-demo.ts`) y
+una sesión simulada en `sessionStorage` (`components/panel/sesion-demo.ts`) con cuatro
+cuentas de prueba (`recepcion@`, `dependencia@`, `archivo@`, `admin@uniautonoma.edu.co`,
+contraseña `Demo2026*`). El login lleva a `/panel`, que muestra las secciones del rol; el
+panel sin sesión redirige a `/login` y una sección ajena al rol muestra un aviso. Nada de
+esto es seguridad real: se reemplaza por `POST /api/v1/auth/login` y cookie `HttpOnly` (RF-013).
+No se implementó lo propio del prototipo (pestañas para cambiar de rol y panel de "Notas
+del documento").
 
 ## Reglas
 
