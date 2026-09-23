@@ -1,21 +1,9 @@
-# Tareas faltantes (backlog)
-
-Organizado por sprint del F-02. Cada tarea cita su RF. Promover a `tareas-por-realizar.md`
-solo con confirmación del usuario.
-
-## Base (antes o al inicio del Sprint 1)
-
-- [ ] GD-001: Obtener la firma del F-02 (numeral 9) y resolver las preguntas P-01…P-14
-  Spec: ia_contexto/spec/decisiones.md
-  Prioridad: alta
-  Nota: sin firma no se avanza al siguiente hito.
-
-- [ ] GD-002: Decidir BD, almacén de adjuntos, correo, CAPTCHA y hosting (D-04, D-09, D-10, D-11)
-  Spec: ia_contexto/spec/decisiones.md
+- [ ] GD-002: Resolver inconsistencias I-01…I-11 (stack, formato del consecutivo, RF-018/RF-019, umbrales del semáforo…)
+  Spec: ia_contexto/spec/historias-juan-manuel.md#inconsistencias-a-resolver-con-el-equipo
   Prioridad: alta
 
-- [ ] GD-003: Estructura base del backend (src/, módulos, manejo de errores, scripts dev/start/test, .env.example)
-  Spec: .agents/skills/desarrollo/SKILL.md
+- [ ] GD-003: Estructura base del backend (módulos, manejo de errores estándar, scripts dev/start/test, .env.example)
+  Spec: .agents/skills/desarrollo/SKILL.md · REQUISITOS_DESARROLLO_SGD.md §5
   Prioridad: alta
   Depende de: GD-002
 
@@ -23,60 +11,81 @@ solo con confirmación del usuario.
   Spec: .agents/skills/testing/SKILL.md
   Prioridad: alta
 
-- [ ] GD-005: Modelo de datos inicial y migraciones (usuarios, roles, dependencias, personas, radicados, contadores, eventos, auditoría)
-  Spec: ia_contexto/spec/data-model.md (por crear)
+- [ ] GD-005: Esquema Prisma inicial y migraciones, incluidos los campos faltantes de I-10
+  Spec: REQUISITOS_DESARROLLO_SGD.md §4 · historias-juan-manuel.md (notas de modelo)
   Prioridad: alta
   Depende de: GD-002
 
-- [ ] GD-006: Layouts base del frontend: grupos (publico) y (panel), tokens de color en globals.css
-  Spec: .agents/skills/frontend/
-  Prioridad: media
-
-## Sprint 1
-
-- [ ] GD-010: Autenticación (RF-013, HU-001)
+- [ ] GD-010: Iniciar sesión con usuario y contraseña (HU-001, RF-013) · 3 pts
   Spec: ia_contexto/spec/requirements.md#rf-013
-  Prioridad: alta
 
-- [ ] GD-011: Administración de usuarios y roles (RF-012, HU-002)
-  Spec: ia_contexto/spec/requirements.md#rf-012
+- [ ] GD-011: Crear y administrar usuarios con rol (HU-002, RF-012) · 5 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-002--crear-y-administrar-usuarios-con-rol
   Prioridad: alta
-  Depende de: GD-010
+  Depende de: GD-011a
 
-- [ ] GD-012: Servicio de consecutivos con prueba de concurrencia (RF-003, HU-003)
-  Spec: ia_contexto/spec/requirements.md#rf-003
+- [ ] GD-012: Generar el consecutivo del radicado automáticamente (HU-003, RF-003) · 5 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-003--generar-el-consecutivo-del-radicado-automáticamente
   Prioridad: alta
+  Depende de: GD-012a
 
-- [ ] GD-013: Registrar y radicar comunicación de entrada (RF-001, HU-004)
+- [ ] GD-013: Registrar los datos de una comunicación recibida (HU-004, RF-001) · 8 pts
   Spec: ia_contexto/spec/requirements.md#rf-001
-  Prioridad: alta
   Depende de: GD-012
 
-## Sprint 2
+- [ ] GD-020: Adjuntar el documento escaneado/digital al radicado (HU-005, RF-004) · 5 pts
 
-- [ ] GD-020: Adjuntar documentos al radicado (RF-004, HU-005)
-- [ ] GD-021: Enviar y reasignar radicado a dependencia (RF-005, HU-006)
-- [ ] GD-022: Comunicación de salida relacionada y copias por correo (RF-002, HU-007)
-- [ ] GD-023: Historial documental por cédula (RF-007, HU-008)
-- [ ] GD-024: Registro y edición auditada de personas (RF-008, HU-009)
-- [ ] GD-025: Correspondencia sin consecutivo (RF-014, HU-014)
+- [ ] GD-026: Configurar tipos de trámite y sus plazos (HU-019, RF-019) · 5 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-019--configurar-tipos-de-trámite-y-sus-plazos
+  Depende de: GD-026a
 
-## Sprint 3
+- [ ] GD-021: Enviar el radicado a la dependencia responsable (HU-006, RF-005) · 5 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-006--enviar-el-radicado-a-la-dependencia-responsable
+  Depende de: GD-021a
 
-- [ ] GD-030: Línea de tiempo del radicado (RF-006, HU-010)
-- [ ] GD-031: Consultas con filtros combinados (RF-009, HU-011)
-- [ ] GD-032: Anulación controlada (RF-011, HU-012)
-- [ ] GD-033: Expedientes y clasificación en Archivo Central (RF-010, HU-013)
+- [ ] GD-022: Generar respuesta y notificar a Recepción y solicitante (HU-007, RF-002) · 8 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-007--generar-respuesta-y-notificar-a-recepción-y-al-solicitante
+  Depende de: GD-022a
+
+- [ ] GD-023: Buscar una persona por cédula y ver su historial (HU-008, RF-007) · 8 pts
+
+- [ ] GD-024: Actualizar celular/correo de una persona (HU-009, RF-008) · 3 pts
+
+- [ ] GD-025: Registrar revista/factura/paquete sin radicar (HU-014, RF-014) · 2 pts
+
+- [ ] GD-030: Consultar en qué estado está un documento (HU-010, RF-006) · 5 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-010--consultar-en-qué-estado-está-un-documento
+  Depende de: GD-030a
+
+- [ ] GD-034: Recibir alerta cuando un radicado esté por vencer (HU-015, RF-015) · 8 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-015--recibir-alerta-cuando-un-radicado-esté-por-vencer
+  Depende de: GD-034a
+  Bloqueo: umbrales del semáforo (I-05) y festivos / días hábiles (P-03)
+
+- [ ] GD-035: Llevar un trabajo de grado por estado de comité (HU-016, RF-016) · 8 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-016--llevar-un-trabajo-de-grado-por-estado-de-comité
+  Depende de: GD-035a
+
+- [ ] GD-037: Consultar el estado de mis trámites sin iniciar sesión (HU-018, RF-018) · 5 pts
+  Spec: ia_contexto/spec/historias-juan-manuel.md#hu-018--consultar-el-estado-de-mis-trámites-sin-iniciar-sesión
+  Depende de: GD-037a
+
+- [ ] GD-031: Filtrar radicados por fecha, tipo, dependencia o remitente (HU-011, RF-009) · 8 pts
+
+- [ ] GD-032: Anular un documento con constancia del motivo (HU-012, RF-011) · 3 pts
+
+- [ ] GD-033: Clasificar documentos en expedientes por serie documental (HU-013, RF-010) · 8 pts
   Bloqueo: definición de expediente y TRD (P-07)
-- [ ] GD-034: Alertas de vencimiento y configuración de plazos por trámite (RF-015, HU-015)
-- [ ] GD-035: Flujo de aprobación por comité (RF-016, HU-016)
-- [ ] GD-036: Portal público de autorradicación con CAPTCHA (RF-017, HU-017)
+
+- [ ] GD-036: Radicar mi propia solicitud desde el portal público (HU-017, RF-017) · 8 pts
   Bloqueo: P-01 (prellenado por cédula)
 
-## Verificación de RNF
-
 - [ ] GD-040: Prueba de carga del listado con 500 radicados (RNF-001)
+
 - [ ] GD-041: Matriz rol × endpoint e inspección de contraseñas (RNF-002)
+
 - [ ] GD-042: Prueba de usabilidad con un usuario real de Recepción (RNF-003)
+
 - [ ] GD-043: Pruebas en Chrome y Edge, escritorio y celular (RNF-005)
+
 - [ ] GD-044: Carga de paquete de 100 MB con operaciones concurrentes (RNF-007)
