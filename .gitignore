@@ -1,0 +1,51 @@
+# Dependencias
+node_modules/
+.pnp
+.pnp.*
+
+# Builds
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+
+# Pruebas
+coverage/
+playwright-report/
+test-results/
+
+# Variables de entorno y secretos (se versiona solo .env.example)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Adjuntos subidos y respaldos: contienen datos personales (Ley 1581)
+backend_gestion_documental/uploads/
+backend_gestion_documental/storage/
+*.dump
+*.backup
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Configuración local de Claude Code (las skills en .claude/skills sí se versionan)
+.claude/settings.local.json
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Despliegue
+.vercel
