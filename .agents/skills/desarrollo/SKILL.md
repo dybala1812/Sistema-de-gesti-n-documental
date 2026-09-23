@@ -27,6 +27,7 @@ no las reabras sin hablar con el usuario.
 | Lenguaje frontend | TypeScript 5 (`strict: true`) | instalado |
 | Estilos | Tailwind CSS 4 (`@tailwindcss/postcss`) | instalado |
 | Linter frontend | ESLint 9 + `eslint-config-next` | instalado |
+| UI frontend | lucide-react, sileo, gsap, Radix (dialog/popover), cva, jspdf | instalado (ver `frontend/instructions.md`) |
 | Backend | Node + Express 5 (CommonJS) | instalado, sin código |
 | Recarga backend | nodemon | instalado, sin script |
 | Base de datos | relacional (PostgreSQL recomendado) | **por decidir** (ver `decisiones.md`) |
