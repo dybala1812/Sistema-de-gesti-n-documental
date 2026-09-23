@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Tokens de la maquetación de interfaz SGD v1.0
+  (ia_contexto/spec/Interfaz del documento). Esquinas rectas en todo el sistema,
+  salvo la barra de navegación del portal, que es una píldora.
+*/
+@theme {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-poppins), var(--font-inter), system-ui, sans-serif;
+
+  --color-marca: #243b8e;
+  --color-acento: #f4b400;
+  --color-acento-hover: #e0a500;
+  --color-acento-oscuro: #b07c00;
+  --color-acento-texto: #7a5a00;
+  --color-acento-claro: #fffbeb;
+  --color-sobre-acento: #0b1020;
+  --color-info: #0047cc;
+  --color-info-claro: rgb(0 71 204 / 0.1);
+
+  --color-tinta: #1e293b;
+  --color-tinta-suave: #64748b;
+  --color-tinta-profunda: #0f172a;
+  --color-fondo: #ffffff;
+  --color-fondo-alt: #f8fafc;
+  --color-fondo-sutil: #f1f5f9;
+  --color-borde: #e2e8f0;
+  --color-borde-campo: #cbd5e1;
+
+  --color-exito: #15803d;
+  --color-exito-claro: #e7f3ea;
+  --color-peligro: #b91c1c;
+  --color-peligro-claro: #fbe7e7;
+
+  --shadow-flotante: 0 12px 32px rgb(15 23 42 / 0.14);
+  --shadow-cristal: 0 10px 34px rgb(15 23 42 / 0.13), inset 0 1px 0 rgb(255 255 255 / 0.9);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-acento);
+  color: var(--color-sobre-acento);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes emerger {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
