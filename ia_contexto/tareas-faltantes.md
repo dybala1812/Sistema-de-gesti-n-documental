@@ -11,11 +11,6 @@
   Spec: .agents/skills/testing/SKILL.md
   Prioridad: alta
 
-- [ ] GD-005: Esquema Prisma inicial y migraciones, incluidos los campos faltantes de I-10
-  Spec: REQUISITOS_DESARROLLO_SGD.md §4 · historias-juan-manuel.md (notas de modelo)
-  Prioridad: alta
-  Depende de: GD-002
-
 - [ ] GD-010: Iniciar sesión con usuario y contraseña (HU-001, RF-013) · 3 pts
   Spec: ia_contexto/spec/requirements.md#rf-013
 
