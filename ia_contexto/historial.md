@@ -51,3 +51,18 @@ Tests: lint sin errores; build de 23 rutas; en navegador: /panel sin sesión →
 contraseña incorrecta → error genérico, dependencia → inicio con 2 secciones, /panel/admin
 bloqueado, ficha accesible, cerrar sesión → /login, copia del correo con aviso.
 Commit: ninguno.
+
+## 2026-09-24 — GD-005 en revisión: base de datos en SQL
+
+Cambio: `backend_gestion_documental/base-de-datos/` con el modelo aprobado (MODELO_DE_DATOS.md)
+pasado a PostgreSQL: esquema `sgd`, roles `sgd_api` y `sgd_auth`, 22 enums, 28 tablas
+(63 FK, 57 CHECK, 25 UNIQUE), 93 índices, 16 funciones, 19 disparadores, RLS en las 28
+tablas con 76 políticas, semilla (roles, tipos de documento, trámites, festivos 2026–2027,
+parámetros, administrador sin contraseña) y `sgd_completo.sql` para pegar en Supabase.
+`usuarios` separada de `credenciales_usuario` (D-BD-12).
+Tests: base nueva en PostgreSQL 18.3 local → sgd_completo.sql sin errores;
+pruebas/pruebas_seguridad.sql 26/26 OK (texto plano rechazado, sin DELETE, sin contexto no
+se ve nada, IDOR entre dependencias bloqueado, portal sin acceso a datos ajenos, anon sin
+acceso); pgbench 8 conexiones × 250 = 2.000 consecutivos, 2.000 distintos (1…2.000).
+Seguridad: sin contraseñas en el repositorio; roles creados sin LOGIN; el esquema no se expone.
+Commit: ninguno.
