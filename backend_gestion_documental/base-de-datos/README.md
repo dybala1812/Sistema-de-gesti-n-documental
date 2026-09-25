@@ -48,15 +48,13 @@ Se ejecuta **una sola vez**, sobre un proyecto sin el esquema `sgd`.
    Las contraseñas van **solo** en el `.env` del backend (que está en `.gitignore`), nunca en el
    repositorio ni en este archivo.
 
-4. **Cadenas de conexión del backend** (`.env`). En *Connect* → *Connection pooling* copia el host
-   del pooler. El usuario lleva el id del proyecto como sufijo:
-
-   ```env
-   # API general (RLS aplica)
-   DATABASE_URL_API="postgresql://sgd_api.<id-proyecto>:<contraseña>@<host-pooler>:6543/postgres?sslmode=require&pgbouncer=true"
-   # Módulo de autenticación
-   DATABASE_URL_AUTH="postgresql://sgd_auth.<id-proyecto>:<contraseña>@<host-pooler>:6543/postgres?sslmode=require&pgbouncer=true"
-   ```
+4. **Cadenas de conexión del backend.** Copia `backend_gestion_documental/.env.example` a
+   `.env` y completa `DATABASE_URL_API`, `DATABASE_URL_AUTH` y `DIRECT_URL` (esta última con la
+   conexión directa al puerto 5432, como el rol `postgres`, para `prisma db pull` y los scripts de
+   `pruebas/`). En Supabase, *Connect* → *Connection pooling* da el host del pooler; el usuario
+   lleva el id del proyecto como sufijo (`sgd_api.<id-proyecto>`). El `.env.example` completo trae
+   además JWT, cookies, adjuntos, correo y CAPTCHA — ver la plantilla para el resto de variables
+   que necesita el backend, no solo la base de datos.
 
    El puerto 6543 (modo transacción) funciona con RLS porque el contexto se fija con
    `set_config(..., true)`, que solo dura la transacción. La API **nunca** usa la clave
